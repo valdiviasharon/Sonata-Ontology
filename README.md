@@ -54,26 +54,6 @@ This will:
 - Process every XML file, extracting data and exporting one `.ttl` RDF file per score into the `TTL/` directory.
 - The namespace prefix used is customizable in the script.
 
-## Scripts Reference
-
-### `metadata.py`
-Extracts basic metadata from an XML score, such as title, instrument, and number of measures.
-
-### `xml_to_elements_json.py`
-Performs detailed analysis of the score, including:
-- All measures, notes, chords, rests
-- Structural and expressive elements (dynamics, articulations, key changes, time signatures)
-- Computes and registers global key and tonality
-
-### `structure_analysis.py`
-Segments the score into musical phrases based on novelty detection (change points in the music), outputting their locations as a list.
-
-### `json_to_rdf.py`
-Integrates all the extracted data (metadata, elements, structure) and serializes it into an RDF graph using the [rdflib](https://rdflib.readthedocs.io/) library and a custom ontology.
-
-### `process_sonata.sh`
-Runs the complete pipeline for all XML files, generating the final RDF output for each piece.
-
 ## Output
 
 For each score, the pipeline produces:
@@ -88,3 +68,17 @@ For each score, the pipeline produces:
   Change the `PREFIX_SO` variable in `process_sonata.sh` to set your own ontology URL prefix.
 - **Input/output paths:**  
   Modify the paths at the top of the script for custom datasets.
+
+## Semantic Queries and Visualization: Using a Graph Database
+
+After processing, each Beethoven sonata is exported as an **RDF (Turtle)** file encoding musical structure, metadata, and analytical features using a custom ontology. These RDF files can be loaded into a **graph database** (such as [GraphDB](https://www.ontotext.com/products/graphdb/), [Apache Jena Fuseki](https://jena.apache.org/documentation/fuseki2/), or [Blazegraph](https://blazegraph.com/)) to enable:
+
+- **SPARQL Queries:** Query the musical data semantically (e.g., retrieve all phrases in a specific key, list all dynamic markings in a sonata, analyze chord progressions).
+- **Graph Visualization:** Explore and visualize the structural and relational aspects of musical works, such as networks of phrases, relationships between notes and chords, and metadata connections.
+- **Knowledge Integration:** Combine musical RDF data with other linked data sources for richer analysis.
+
+To experiment with semantic queries and graph visualization:
+
+- Download and install a graph database (e.g., GraphDB Free, Apache Jena Fuseki).
+- Create a new repository (in GraphDB, click "Repositories" > "Create new repository").
+- Upload the sonata_ontology.ttl file and one or more `.ttl` files from the `TTL/` directory to your graph database.
