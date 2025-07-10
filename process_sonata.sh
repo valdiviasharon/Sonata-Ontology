@@ -28,13 +28,13 @@ for xmlfile in "$XML_DIR"/*.xml; do
     mkdir -p "$subdir"
 
     # Metadata
-    #"$VENV_PYTHON" "$SCRIPT_DIR/metadata.py" "$xmlfile" "$subdir/metadata.json"
+    "$VENV_PYTHON" "$SCRIPT_DIR/metadata.py" "$xmlfile" "$subdir/metadata.json"
 
     # Notes, Chords, Rest, Measure, Key, Tempo, Time Signature, Dynamics, Clefs, 
-    #"$VENV_PYTHON" "$SCRIPT_DIR/xml_to_elements_json.py" "$xmlfile" "$subdir/metadata.json" "$subdir/elements.json"
+    "$VENV_PYTHON" "$SCRIPT_DIR/xml_to_elements_json.py" "$xmlfile" "$subdir/metadata.json" "$subdir/elements.json"
 
     # Structure - PHRASES
-    #"$VENV_PYTHON" "$SCRIPT_DIR/structure_analysis.py" "$subdir/elements.json" "$subdir/phrases.json"
+    "$VENV_PYTHON" "$SCRIPT_DIR/structure_analysis.py" "$subdir/elements.json" "$subdir/phrases.json"
 
     #JSON TO RDF - data.ttl per each sonata
     "$VENV_PYTHON" "$SCRIPT_DIR/json_to_rdf.py" "$subdir" "$PREFIX_SO" "$TTL_DIR/$base.ttl"
