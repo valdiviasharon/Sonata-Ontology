@@ -1,544 +1,990 @@
-@prefix : <http://example.org/sonata#> .
-@prefix owl: <http://www.w3.org/2002/07/owl#> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix xml: <http://www.w3.org/XML/1998/namespace> .
-@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@base <http://example.org/sonata#> .
+@prefix so: <https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#> .  
+## @base <https://example.org/sonata-ontology> .
+## @prefix so: <https://example.org/sonata-ontology#> .
 
-[ rdf:type owl:Ontology
- ] .
+# HaMSE Ontology
+@prefix ho:  <https://github.com/andreamust/HaMSE_Ontology/schema#> .
+# Music Ontology
+@prefix mo: <http://purl.org/ontology/mo/> .
+# Music Theory Ontology
+@prefix mto: <http://purl.org/ontology/mto/> .
+# MusicOWL
+@prefix mso: <http://linkeddata.uni-muenster.de/ontology/musicscore#> .
+# OMRAS2 Chord Ontology
+@prefix co: <http://purl.org/ontology/chord/> .
+# Music Note Ontology
+@prefix mno: <https://purl.org/andreapoltronieri/notepattern#> .
 
-#################################################################
-#    Object Properties
-#################################################################
-
-###  http://example.org/sonata#hasChord
-:hasChord rdf:type owl:ObjectProperty ;
-          rdfs:domain :Measure ;
-          rdfs:range :Chord ;
-          rdfs:comment "Connects a Measure to its Chords."@en ;
-          rdfs:label "has chord"@en .
-
-
-###  http://example.org/sonata#hasClef
-:hasClef rdf:type owl:ObjectProperty ;
-         rdfs:domain :Measure ;
-         rdfs:range :Clef ;
-         rdfs:comment "Connects a Measure to its Clef."@en ;
-         rdfs:label "has clef"@en .
+### ===== Additional Ontologies =====
+@prefix dct:   <http://purl.org/dc/terms/> .
+@prefix vann:  <http://purl.org/vocab/vann/> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
 
 
-###  http://example.org/sonata#hasDynamic
-:hasDynamic rdf:type owl:ObjectProperty ;
-            rdfs:domain :Measure ;
-            rdfs:range :Dynamic ;
-            rdfs:comment "Connects a Measure to its Dynamics."@en ;
-            rdfs:label "has dynamic"@en .
+### HEADER
 
-
-###  http://example.org/sonata#hasKey
-:hasKey rdf:type owl:ObjectProperty ;
-        rdfs:range :Key ;
-        rdfs:comment "Connects an entity to a Key (global or local context)."@en ;
-        rdfs:label "has key"@en .
-
-
-###  http://example.org/sonata#hasKeySignature
-:hasKeySignature rdf:type owl:ObjectProperty ;
-                 rdfs:domain :Measure ;
-                 rdfs:range :KeySignature ;
-                 rdfs:comment "Connects a Measure to its KeySignature."@en ;
-                 rdfs:label "has key signature"@en .
-
-
-###  http://example.org/sonata#hasNote
-:hasNote rdf:type owl:ObjectProperty ;
-         rdfs:domain [ rdf:type owl:Class ;
-                       owl:unionOf ( :Chord
-                                     :Measure
-                                   )
-                     ] ;
-         rdfs:range :Note ;
-         rdfs:comment "Connects a Measure or Chord to its Notes."@en ;
-         rdfs:label "has note"@en .
-
-
-###  http://example.org/sonata#hasRest
-:hasRest rdf:type owl:ObjectProperty ;
-         rdfs:domain :Measure ;
-         rdfs:range :Rest ;
-         rdfs:comment "Connects a Measure to its Rests."@en ;
-         rdfs:label "has rest"@en .
-
-
-###  http://example.org/sonata#hasRomanNumeral
-:hasRomanNumeral rdf:type owl:ObjectProperty ;
-                 rdfs:domain :Chord ;
-                 rdfs:range :RomanNumeral ;
-                 rdfs:comment "Connects a Chord to its Roman numeral harmonic analysis."@en ;
-                 rdfs:label "has Roman numeral"@en .
-
-
-###  http://example.org/sonata#hasTempo
-:hasTempo rdf:type owl:ObjectProperty ;
-          rdfs:domain :Measure ;
-          rdfs:range :Tempo ;
-          rdfs:comment "Connects a Measure to its Tempo."@en ;
-          rdfs:label "has tempo"@en .
-
-
-###  http://example.org/sonata#hasTimeSignature
-:hasTimeSignature rdf:type owl:ObjectProperty ;
-                  rdfs:domain :Measure ;
-                  rdfs:range :TimeSignature ;
-                  rdfs:comment "Connects a Measure to its TimeSignature."@en ;
-                  rdfs:label "has time signature"@en .
-
-
-###  http://example.org/sonata#inChord
-:inChord rdf:type owl:ObjectProperty ;
-         rdfs:domain :Note ;
-         rdfs:range :Chord ;
-         rdfs:comment "Specifies the Chord to which a Note belongs."@en ;
-         rdfs:label "in chord"@en .
-
-
-###  http://example.org/sonata#inMovement
-:inMovement rdf:type owl:ObjectProperty ;
-            rdfs:domain [ rdf:type owl:Class ;
-                          owl:unionOf ( :Measure
-                                        :Phrase
-                                        :Section
-                                      )
-                        ] ;
-            rdfs:range :Movement ;
-            rdfs:comment "Specifies the Movement to which a Section, Phrase, or Measure belongs."@en ;
-            rdfs:label "in movement"@en .
-
-
-###  http://example.org/sonata#inPhrase
-:inPhrase rdf:type owl:ObjectProperty ;
-          rdfs:domain :Measure ;
-          rdfs:range :Phrase ;
-          rdfs:comment "Specifies the Phrase to which a Measure belongs."@en ;
-          rdfs:label "in phrase"@en .
-
-
-###  http://example.org/sonata#inSection
-:inSection rdf:type owl:ObjectProperty ;
-           rdfs:domain [ rdf:type owl:Class ;
-                         owl:unionOf ( :Measure
-                                       :Phrase
-                                     )
-                       ] ;
-           rdfs:range :Section ;
-           rdfs:comment "Specifies the Section to which a Phrase or Measure belongs."@en ;
-           rdfs:label "in section"@en .
+<https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#>
+  a owl:Ontology ;
+  dct:title "Sonata Ontology"@en ;
+  dct:description "An ontology focused on the analysis, representation, and preservation of piano sonatas."@en ;
+  dct:creator "Sharon Valdivia" ;
+  owl:versionInfo "0.1.0" ;
+  vann:preferredNamespacePrefix "so" ;
+  vann:preferredNamespaceUri "https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#" .  
 
 
 #################################################################
-#    Data properties
+## METADATA 
 #################################################################
 
-###  http://example.org/sonata#accidental
-:accidental rdf:type owl:DatatypeProperty ;
-            rdfs:domain :Note ;
-            rdfs:range xsd:string ;
-            rdfs:comment "Accidental for a Note, if present."@en ;
-            rdfs:label "accidental"@en .
+so:Sonata a owl:Class ;
+  rdfs:subClassOf mo:MusicalWork ;
+  rdfs:label "Sonata"@en ;
+  rdfs:comment "A musical work in sonata form; specialization of mo:MusicalWork."@en .
 
+so:title a owl:DatatypeProperty ;
+  rdfs:domain mo:MusicalWork ; rdfs:range xsd:string ;
+  rdfs:label "title"@en ;
+  rdfs:comment "Title of the musical work (composition)."@en .
 
-###  http://example.org/sonata#articulation
-:articulation rdf:type owl:DatatypeProperty ;
-              rdfs:domain :Note ;
-              rdfs:range xsd:string ;
-              rdfs:comment "Articulation for a Note, e.g., staccato or tenuto."@en ;
-              rdfs:label "articulation"@en .
+so:composer a owl:DatatypeProperty ;
+  rdfs:domain mo:MusicalWork ; rdfs:range xsd:string ;
+  rdfs:label "composer"@en ;
+  rdfs:comment "Composer's name of the musical work ."@en .
 
+so:hasKey a owl:ObjectProperty ;
+  rdfs:domain mo:MusicalWork ; rdfs:range  mto:Key ;
+  rdfs:label  "has key"@en ;
+  rdfs:comment "Associates the work to its theoretical key (tonality)."@en .
 
-###  http://example.org/sonata#bass
-:bass rdf:type owl:DatatypeProperty ;
-      rdfs:range xsd:string ;
-      rdfs:comment "Bass note for Chord or RomanNumeral."@en ;
-      rdfs:label "bass"@en .
-
-
-###  http://example.org/sonata#bpm
-:bpm rdf:type owl:DatatypeProperty ;
-     rdfs:domain :Tempo ;
-     rdfs:range xsd:float ;
-     rdfs:comment "Tempo (beats per minute)."@en ;
-     rdfs:label "bpm"@en .
-
-
-###  http://example.org/sonata#clef
-:clef rdf:type owl:DatatypeProperty ;
-      rdfs:range xsd:string ;
-      rdfs:comment "ID of the Clef used for this object."@en ;
-      rdfs:label "clef"@en .
-
-
-###  http://example.org/sonata#commonName
-:commonName rdf:type owl:DatatypeProperty ;
-            rdfs:domain :Chord ;
-            rdfs:range xsd:string ;
-            rdfs:comment "Common name of a Chord."@en ;
-            rdfs:label "common name"@en .
-
-
-###  http://example.org/sonata#duration
-:duration rdf:type owl:DatatypeProperty ;
-          rdfs:range xsd:string ;
-          rdfs:comment "Duration type (e.g., quarter, half) of a Note or Rest."@en ;
-          rdfs:label "duration"@en .
-
-
-###  http://example.org/sonata#dynamic
-:dynamic rdf:type owl:DatatypeProperty ;
-         rdfs:domain :Note ;
-         rdfs:range xsd:string ;
-         rdfs:comment "Dynamic marking for a Note."@en ;
-         rdfs:label "dynamic"@en .
-
-
-###  http://example.org/sonata#end_measure
-:end_measure rdf:type owl:DatatypeProperty ;
-             rdfs:domain :Phrase ;
-             rdfs:range xsd:string ;
-             rdfs:comment "ID of the ending measure for a phrase."@en ;
-             rdfs:label "end measure"@en .
-
-
-###  http://example.org/sonata#fifths
-:fifths rdf:type owl:DatatypeProperty ;
-        rdfs:range xsd:integer ;
-        rdfs:comment "Number of sharps/flats for KeySignature."@en ;
-        rdfs:label "fifths"@en .
-
-
-###  http://example.org/sonata#figure
-:figure rdf:type owl:DatatypeProperty ;
-        rdfs:range xsd:string ;
-        rdfs:comment "Roman numeral figure for RomanNumeral."@en ;
-        rdfs:label "figure"@en .
-
-
-###  http://example.org/sonata#global_key
-:global_key rdf:type owl:DatatypeProperty ;
-            rdfs:domain :Metadata ;
-            rdfs:range xsd:string ;
-            rdfs:comment "Key ID for the global key context of the piece."@en ;
-            rdfs:label "global key"@en .
-
-
-###  http://example.org/sonata#instrument
-:instrument rdf:type owl:DatatypeProperty ;
-            rdfs:domain :Metadata ;
-            rdfs:range xsd:string ;
-            rdfs:comment "Instrument or part name for the score."@en ;
-            rdfs:label "instrument"@en .
-
-
-###  http://example.org/sonata#inversion
-:inversion rdf:type owl:DatatypeProperty ;
-           rdfs:range xsd:integer ;
-           rdfs:comment "Inversion index for Chord or RomanNumeral."@en ;
-           rdfs:label "inversion"@en .
-
-
-###  http://example.org/sonata#key
-:key rdf:type owl:DatatypeProperty ;
-     rdfs:range xsd:string ;
-     rdfs:comment "Key (ID) for a RomanNumeral."@en ;
-     rdfs:label "key"@en .
-
-
-###  http://example.org/sonata#measure
-:measure rdf:type owl:DatatypeProperty ;
-         rdfs:range xsd:string ;
-         rdfs:comment "ID of the Measure this object belongs to."@en ;
-         rdfs:label "measure"@en .
-
-
-###  http://example.org/sonata#mode
-:mode rdf:type owl:DatatypeProperty ;
-      rdfs:range xsd:string ;
-      rdfs:comment "Mode (major, minor) for Key or KeySignature."@en ;
-      rdfs:label "mode"@en .
-
-
-###  http://example.org/sonata#number
-:number rdf:type owl:DatatypeProperty ;
-        rdfs:range xsd:integer ;
-        rdfs:comment "Number of measure, phrase, etc."@en ;
-        rdfs:label "number"@en .
-
-
-###  http://example.org/sonata#octave
-:octave rdf:type owl:DatatypeProperty ;
-        rdfs:domain :Note ;
-        rdfs:range xsd:integer ;
-        rdfs:comment "Octave number of a Note."@en ;
-        rdfs:label "octave"@en .
-
-
-###  http://example.org/sonata#offset
-:offset rdf:type owl:DatatypeProperty ;
-        rdfs:range xsd:float ;
-        rdfs:comment "Offset (position) within a measure."@en ;
-        rdfs:label "offset"@en .
-
-
-###  http://example.org/sonata#part
-:part rdf:type owl:DatatypeProperty ;
-      rdfs:range xsd:string ;
-      rdfs:comment "Instrument or part name for Note, Rest, or Chord."@en ;
-      rdfs:label "part"@en .
-
-
-###  http://example.org/sonata#pitch
-:pitch rdf:type owl:DatatypeProperty ;
-       rdfs:domain :Note ;
-       rdfs:range xsd:string ;
-       rdfs:comment "Pitch name of a Note."@en ;
-       rdfs:label "pitch"@en .
-
-
-###  http://example.org/sonata#pitchedCommonName
-:pitchedCommonName rdf:type owl:DatatypeProperty ;
-                   rdfs:domain :Chord ;
-                   rdfs:range xsd:string ;
-                   rdfs:comment "Common name for a Chord including pitch content."@en ;
-                   rdfs:label "pitched common name"@en .
-
-
-###  http://example.org/sonata#start_measure
-:start_measure rdf:type owl:DatatypeProperty ;
-               rdfs:domain :Phrase ;
-               rdfs:range xsd:string ;
-               rdfs:comment "ID of the starting measure for a phrase."@en ;
-               rdfs:label "start measure"@en .
-
-
-###  http://example.org/sonata#symbol
-:symbol rdf:type owl:DatatypeProperty ;
-        rdfs:range xsd:string ;
-        rdfs:comment "Symbolic name for a Chord, KeySignature or TimeSignature."@en ;
-        rdfs:label "symbol"@en .
-
-
-###  http://example.org/sonata#text
-:text rdf:type owl:DatatypeProperty ;
-      rdfs:range xsd:string ;
-      rdfs:comment "Text field for Tempo or other markings."@en ;
-      rdfs:label "text"@en .
-
-
-###  http://example.org/sonata#tie
-:tie rdf:type owl:DatatypeProperty ;
-     rdfs:domain :Note ;
-     rdfs:range xsd:string ;
-     rdfs:comment "Tie information for a Note."@en ;
-     rdfs:label "tie"@en .
-
-
-###  http://example.org/sonata#title
-:title rdf:type owl:DatatypeProperty ;
-       rdfs:domain :Metadata ;
-       rdfs:range xsd:string ;
-       rdfs:comment "Title of the score or piece."@en ;
-       rdfs:label "title"@en .
-
-
-###  http://example.org/sonata#tonality
-:tonality rdf:type owl:DatatypeProperty ;
-          rdfs:domain :Metadata ;
-          rdfs:range xsd:string ;
-          rdfs:comment "Tonality of the score, e.g., F minor."@en ;
-          rdfs:label "tonality"@en .
-
-
-###  http://example.org/sonata#tonic
-:tonic rdf:type owl:DatatypeProperty ;
-       rdfs:range xsd:string ;
-       rdfs:comment "Tonic of a Key or KeySignature."@en ;
-       rdfs:label "tonic"@en .
-
-
-###  http://example.org/sonata#total_measures
-:total_measures rdf:type owl:DatatypeProperty ;
-                rdfs:domain :Metadata ;
-                rdfs:range xsd:integer ;
-                rdfs:comment "Total number of measures in the piece."@en ;
-                rdfs:label "total measures"@en .
-
-
-###  http://example.org/sonata#value
-:value rdf:type owl:DatatypeProperty ;
-       rdfs:domain :Dynamic ;
-       rdfs:range xsd:string ;
-       rdfs:comment "Value for Dynamic (e.g., f, mf, p)."@en ;
-       rdfs:label "value"@en .
-
+so:isKeyOfWork a owl:ObjectProperty ;
+  rdfs:domain mto:Key ;
+  rdfs:range  mo:MusicalWork ;
+  rdfs:label  "is key of work"@en ;
+  owl:inverseOf so:hasKey .
 
 #################################################################
-#    Classes
+# STRUCTURE
 #################################################################
 
-###  http://example.org/sonata#Chord
-:Chord rdf:type owl:Class ;
-       rdfs:subClassOf :MusicNotation ;
-       rdfs:comment "A group of simultaneous notes, represented notationally in the score. Harmonic analysis is provided separately via RomanNumeral, Key, etc."@en ;
-       rdfs:label "Chord"@en .
+mso:Movement a owl:Class;
+  rdfs:label "Movement"@en ;
+  rdfs:comment "A movement of a Musical Work"@en .
+
+so:MovementNumber a owl:DatatypeProperty;
+  rdfs:domain mso:Movement ; rdfs:range xsd:integer ;
+  rdfs:label "MovementNumber"@en ;
+  rdfs:comment "Movement number in the score."@en .
+
+so:hasMovement a owl:ObjectProperty ;
+  rdfs:domain mo:MusicalWork ; rdfs:range mso:Movement ;
+  rdfs:label "has movement"@en ;
+  rdfs:comment "Associates a musical work with one of its movements."@en .
+
+so:isMovementOfWork a owl:ObjectProperty ;
+  rdfs:domain mso:Movement ; rdfs:range mo:MusicalWork ;
+  rdfs:label "is movement of work"@en ;
+  owl:inverseOf so:hasMovement .
 
 
-###  http://example.org/sonata#ChordProgression
-:ChordProgression rdf:type owl:Class ;
-                  rdfs:subClassOf :Harmony ;
-                  rdfs:comment "A sequence of chords that establishes a harmonic pattern."@en ;
-                  rdfs:label "Chord Progression"@en .
+mno:Section a owl:Class ;
+  rdfs:label "Section"@en ;
+  rdfs:comment "A structural section of a movement"@en .
+
+so:hasSection a owl:ObjectProperty ;
+  rdfs:domain mso:Movement ; rdfs:range mno:Section ;
+  rdfs:label "has section"@en ;
+  rdfs:comment "Associates a movement to one of its formal sections."@en .
+
+so:isSectionOfMovement a owl:ObjectProperty ;
+  rdfs:domain mno:Section ; rdfs:range mso:Movement ;
+  rdfs:label "is section of movement"@en ;
+  owl:inverseOf so:hasSection .
+
+  
+so:SonataSection a owl:Class ;
+  rdfs:subClassOf mno:Section ;
+  rdfs:label "Sonata Section"@en ;
+  rdfs:comment "A structural section of a sonata (e.g., Exposition, Development, Recapitulation)."@en .
+
+so:Exposition a owl:Class ;
+  rdfs:subClassOf so:SonataSection ;
+  rdfs:label "Exposition"@en ;
+  rdfs:comment "Sonata-form exposition."@en .
+
+so:Development a owl:Class ;
+  rdfs:subClassOf so:SonataSection ;
+  rdfs:label "Development"@en ;
+  rdfs:comment "Sonata-form development."@en .
+
+so:Recapitulation a owl:Class ;
+  rdfs:subClassOf so:SonataSection ;
+  rdfs:label "Recapitulation"@en ;
+  rdfs:comment "Sonata-form recapitulation."@en .
+
+so:Phrase a owl:Class ;
+  rdfs:label "Phrase"@en ;
+  rdfs:comment "A short musical unit forming a coherent idea."@en .
+
+so:hasPhrase a owl:ObjectProperty ;
+  rdfs:domain mno:Section ; rdfs:range so:Phrase ;
+  rdfs:label "has phrase"@en ;
+  rdfs:comment "Associates a phrase to its section."@en .
+
+so:isPhraseOfSection a owl:ObjectProperty ;
+  rdfs:domain so:Phrase ; rdfs:range mno:Section ;
+  rdfs:label "is phrase of section"@en ;
+  owl:inverseOf so:hasPhrase .
+
+so:hasMeasure a owl:ObjectProperty ;
+  rdfs:domain so:Phrase ; rdfs:range mso:Measure ;
+  rdfs:label "has measure"@en ;
+  rdfs:comment "Associates a phrase to its measures."@en .
+
+so:isMeasureOfPhrase a owl:ObjectProperty ;
+  rdfs:domain mso:Measure ; rdfs:range so:Phrase ;
+  rdfs:label "is measure of phrase"@en ;
+  owl:inverseOf so:hasMeasure .
+
+so:number a owl:DatatypeProperty ;
+  rdfs:domain mso:Measure ; rdfs:range xsd:integer ;
+  rdfs:label "number"@en ;
+  rdfs:comment "Measure number in the score (1-based)."@en .
+
+so:startMeasure a owl:ObjectProperty ;
+  rdfs:domain so:Phrase ; rdfs:range mso:Measure ;
+  rdfs:label "start measure"@en ;
+  rdfs:comment "First measure covered by the phrase/section."@en .
+
+so:endMeasure a owl:ObjectProperty ;
+  rdfs:domain so:Phrase ; rdfs:range mso:Measure ;
+  rdfs:label "end measure"@en ;
+  rdfs:comment "Last measure covered by the phrase/section."@en .
+
+so:hasSymbolicEvent a owl:ObjectProperty ;
+  rdfs:domain mso:Measure ; rdfs:range ho:SymbolicEvent ;
+  rdfs:label "has symbolic event"@en ;
+  rdfs:comment "Notes or rests contained in the measure."@en ;
+  owl:inverseOf so:measure .
+
+#################################################################
+## MUSIC NOTATION
+#################################################################
+# Previous class of another ontologies: 
+#  mso:Measure, mso:Rest, mso:Clef, mso:TimeSignature, mso:Dynamic, mso:Articulation;
+#  ho:SymbolicEvent
+
+mso:Note a owl:Class;
+  rdfs:subClassOf ho:SymbolicEvent ;
+  rdfs:label "Note"@en;
+  rdfs:comment "Symbolic Event of type NOTE"@en .
+
+mso:Rest a owl:Class;
+  rdfs:subClassOf ho:SymbolicEvent ;
+  rdfs:label "Rest"@en;
+  rdfs:comment "Symbolic Event of type REST"@en .
+
+so:Accidental a owl:Class ;
+  rdfs:label "Accidental"@en ;
+  rdfs:comment "An alteration to a pitch, such as sharp, flat, or natural."@en .
+
+so:octave a owl:DatatypeProperty ;
+  rdfs:domain mso:Note ; rdfs:range xsd:integer ;
+  rdfs:label "octave"@en ;
+  rdfs:comment "Octave number of the note (e.g., 4 for A4)."@en .
+
+so:Pitch a owl:Class ;
+  rdfs:label "Pitch name"@en ;
+  rdfs:comment "Diatonic pitch name (natural letter name) used as a controlled vocabulary for note naming."@en .
+
+so:hasAccidental a owl:ObjectProperty ;
+  rdfs:domain so:Pitch ;
+  rdfs:range so:Accidental ;
+  rdfs:label "has accidental"@en ;
+  rdfs:comment "Associates a pitch name with an accidental (sharp, flat, or natural)."@en .
+
+so:hasPitch a owl:ObjectProperty ;
+  rdfs:domain mso:Note ;
+  rdfs:range  so:Pitch ;
+  rdfs:label  "has pitch name"@en ;
+  rdfs:comment "Links a symbolic note to a diatonic pitch name (A–G)."@en .
+
+so:Duration a owl:Class ;
+  rdfs:label "Duration"@en ;
+  rdfs:comment "Conventional duration type of an event (whole, half, quarter, etc.). Encodes relative length as a fraction of a whole note."@en .
+
+so:hasDuration a owl:ObjectProperty ;
+  rdfs:domain ho:SymbolicEvent ; # , mso:Rest ;
+  rdfs:range  so:Duration ;
+  rdfs:label  "has Duration"@en ;
+  rdfs:comment "Associates a note/rest with a conventional Duration (whole, half, quarter...), complementary to exact beat durations."@en .
+
+so:measure a owl:ObjectProperty ;
+  rdfs:domain ho:SymbolicEvent ; rdfs:range mso:Measure ;
+  rdfs:label "measure"@en ;
+  rdfs:comment "The measure the note belongs to."@en .
+
+so:clef a owl:ObjectProperty ;
+  rdfs:domain ho:SymbolicEvent; rdfs:range mso:Clef ;
+  rdfs:label "clef"@en ;
+  rdfs:comment "The clef that belong to a symbolic event."@en .
 
 
-###  http://example.org/sonata#Clef
-:Clef rdf:type owl:Class ;
-      rdfs:subClassOf :MusicNotation ;
-      rdfs:comment "A clef sign on the staff, such as G (treble) or F (bass)."@en ;
-      rdfs:label "Clef"@en .
+## Clef (mso:Clef)
+so:line a owl:DatatypeProperty ;
+  rdfs:domain mso:Clef ; rdfs:range xsd:integer ;
+  rdfs:label "line"@en ;
+  rdfs:comment "Reference staff line index used by the clef (e.g., 2 for treble G line)."@en .
+
+so:sign a owl:DatatypeProperty ;
+  rdfs:domain mso:Clef ; rdfs:range xsd:string ;
+  rdfs:label "sign"@en ;
+  rdfs:comment "Clef sign (e.g., G, F, C)."@en .
+
+## Time Signature (mso:TimeSignature)
+so:numerator a owl:DatatypeProperty ;
+  rdfs:domain mso:TimeSignature ; rdfs:range xsd:integer ;
+  rdfs:label "numerator"@en ;
+  rdfs:comment "Top number in the meter."@en .
+
+so:denominator a owl:DatatypeProperty ;
+  rdfs:domain mso:TimeSignature ; rdfs:range xsd:integer ;
+  rdfs:label "denominator"@en ;
+  rdfs:comment "Bottom number in the meter (beat unit)."@en .
+
+so:symbol a owl:DatatypeProperty ;
+  rdfs:domain mso:TimeSignature ; rdfs:range xsd:string ;
+  rdfs:label "symbol"@en ;
+  rdfs:comment "Optional symbolic form (e.g., 'common' C, 'cut' alla breve)."@en .
+
+so:timeSignatureOf a owl:ObjectProperty ;
+  rdfs:domain mso:TimeSignature ; rdfs:range mso:Measure ;
+  rdfs:label "time signature of"@en ;
+  rdfs:comment "Associates a time signature to its measure (if modeled per-measure)."@en .
+
+so:hasTimeSignature a owl:ObjectProperty ;
+  rdfs:domain mso:Measure ; rdfs:range mso:TimeSignature ;
+  rdfs:label "has time signature"@en ;
+  owl:inverseOf so:timeSignatureOf .
+
+## Key & Key Signature (mto:Key + so:KeySignature)
 
 
-###  http://example.org/sonata#Dynamic
-:Dynamic rdf:type owl:Class ;
-         rdfs:subClassOf :Expression ;
-         rdfs:comment "A dynamic marking in the score, such as p, f, mf."@en ;
-         rdfs:label "Dynamic"@en .
+so:KeySignature a owl:Class ;
+  rdfs:label "Key Signature"@en ;
+  rdfs:comment "Notated set of accidentals indicating the key for the staff."@en .
+
+so:hasKeySignature a owl:ObjectProperty ;
+  rdfs:domain mso:Measure ; rdfs:range so:KeySignature ;
+  rdfs:label "has key signature"@en ;
+  rdfs:comment "Associates a measure to its key signature."@en .
+
+so:isKeySignatureOfMeasure a owl:ObjectProperty ;
+  rdfs:domain so:KeySignature ; rdfs:range mso:Measure ;
+  rdfs:label "is key signature of meaure"@en ;
+  owl:inverseOf so:hasKeySignature .
+
+so:fifths a owl:DatatypeProperty ;
+  rdfs:domain so:KeySignature ; rdfs:range xsd:integer ;
+  rdfs:label "fifths"@en ;
+  rdfs:comment "Number of fifths (sharps positive, flats negative)."@en .
+
+so:mode a owl:DatatypeProperty ;
+  rdfs:domain so:KeySignature ; rdfs:range xsd:string ;
+  rdfs:label "mode"@en ;
+  rdfs:comment "Mode name (e.g., major, minor)."@en .
+
+so:tonality a owl:ObjectProperty ;
+  rdfs:domain so:KeySignature ; rdfs:range mto:Key ;
+  rdfs:label "tonality"@en ;
+  rdfs:comment "The theoretical key that the signature encodes."@en .
+
+## Tempo (so:Tempo)
+so:Tempo a owl:Class ;
+  rdfs:label "Tempo Marking"@en ;
+  rdfs:comment "Tempo indication as text (e.g., Allegro) and/or BPM (e.g., ♩=120)."@en .
+
+so:bpm a owl:DatatypeProperty ;
+  rdfs:domain so:Tempo ; rdfs:range xsd:decimal ;
+  rdfs:label "BPM"@en ;
+  rdfs:comment "Beats per minute (tempo)."@en .
+
+so:tempoText a owl:DatatypeProperty ;
+  rdfs:domain so:Tempo ; rdfs:range xsd:string ;
+  rdfs:label "tempo text"@en ;
+  rdfs:comment "Textual tempo indication (e.g., Allegro, Adagio)."@en .
+
+so:tempoOf a owl:ObjectProperty ;
+  rdfs:domain so:Tempo ; rdfs:range mso:Measure ;
+  rdfs:label "tempo of"@en ;
+  rdfs:comment "Associates a tempo to its measure."@en .
+
+so:hasTempo a owl:ObjectProperty ;
+  rdfs:domain mso:Measure ; rdfs:range so:Tempo ;
+  rdfs:label "has tempo"@en ;
+  rdfs:comment "Associates a measure to its tempo."@en ;
+  owl:inverseOf so:tempoOf .
+
+#################################################################
+# HARMONY
+#################################################################
+# (co:Chord)
+
+so:HarmonicProgression a owl:Class ;
+  rdfs:label "Harmonic progression"@en ;
+  rdfs:comment "A sequence of chords forming a harmonic path."@en .
+  
+so:hasChord a owl:ObjectProperty ;
+  rdfs:domain so:HarmonicProgression ; rdfs:range co:Chord ;
+  rdfs:label "has chord"@en ;
+  rdfs:comment "Chord belonging to the progression."@en .
+
+so:order a owl:DatatypeProperty ;
+  rdfs:domain co:Chord ; rdfs:range xsd:integer ;
+  rdfs:label "order"@en ;
+  rdfs:comment "Optional index of the chord inside the progression (1-based)."@en .
+
+## Chord (co:Chord) 
+so:bass a owl:DatatypeProperty ;
+  rdfs:domain co:Chord ; rdfs:range xsd:string ;
+  rdfs:label "bass"@en ;
+  rdfs:comment "Bass pitch or descriptor (e.g., E2)."@en .
+
+so:figure a owl:DatatypeProperty ;
+  rdfs:domain co:Chord ; rdfs:range xsd:string ;
+  rdfs:label "figure"@en ;
+  rdfs:comment "Figured-bass or analytical figure (e.g., 6-5)."@en .
+
+so:commonName a owl:DatatypeProperty ;
+  rdfs:domain co:Chord ; rdfs:range xsd:string ;
+  rdfs:label "common name"@en ;
+  rdfs:comment "Common chord name (e.g., Cmaj7, G7sus4)."@en .
+
+so:pitchedCommonName a owl:DatatypeProperty ;
+  rdfs:domain co:Chord ; rdfs:range xsd:string ;
+  rdfs:label "pitched common name"@en ;
+  rdfs:comment "Chord name including specific pitch spelling if needed."@en .
+
+so:symbol a owl:DatatypeProperty ;
+  rdfs:domain co:Chord ; rdfs:range xsd:string ;
+  rdfs:label "symbol"@en ;
+  rdfs:comment "Lead-sheet chord symbol as written."@en .
+
+so:hasNoteInChord a owl:ObjectProperty ;
+  rdfs:domain co:Chord ; rdfs:range mso:Note ;
+  rdfs:label "has note (chord)"@en ;
+  rdfs:comment "Constituent note of the chord."@en .
+
+so:hasRomanNumeral a owl:ObjectProperty ;
+  rdfs:domain co:Chord ; rdfs:range so:RomanNumeral ;
+  rdfs:label "has Roman numeral"@en ;
+  rdfs:comment "Functional-harmony Roman numeral assigned to this chord."@en .
+
+so:isRomanNumeralOfChord a owl:ObjectProperty ;
+  rdfs:domain so:RomanNumeral ; rdfs:range co:Chord ;
+  rdfs:label "is Roman numeral of chord"@en ;
+  owl:inverseOf so:hasRomanNumeral .
+
+so:chordMeasure a owl:ObjectProperty ;
+  rdfs:domain co:Chord ; rdfs:range mso:Measure ;
+  rdfs:label "measure"@en ;
+  rdfs:comment "Measure where the chord occurs."@en .
+
+so:measureHasChord a owl:ObjectProperty ;
+  rdfs:domain mso:Measure ; rdfs:range co:Chord ;
+  rdfs:label "measure has chord"@en ;
+  owl:inverseOf so:chordMeasure .
+
+## Roman numeral (local)
+so:RomanNumeral a owl:Class ;
+  rdfs:label "Roman numeral chord"@en ;
+  rdfs:comment "Chord expressed in Roman-numeral functional analysis."@en .
+
+so:rnFigure a owl:DatatypeProperty ;
+  rdfs:domain so:RomanNumeral ; rdfs:range xsd:string ;
+  rdfs:label "figure"@en ;
+  rdfs:comment "Roman numeral figure (e.g., V, ii°, Ger+6)."@en .
+
+so:inversion a owl:DatatypeProperty ;
+  rdfs:domain so:RomanNumeral ; rdfs:range xsd:string ;
+  rdfs:label "inversion"@en ;
+  rdfs:comment "Inversion indicator (e.g., root, 6, 6/4)."@en .
+
+so:rnBass a owl:DatatypeProperty ;
+  rdfs:domain so:RomanNumeral ; rdfs:range xsd:string ;
+  rdfs:label "bass"@en ;
+  rdfs:comment "Bass pitch or scale-degree for the Roman numeral."@en .
+
+so:rnKey a owl:ObjectProperty ;
+  rdfs:domain so:RomanNumeral ; rdfs:range mto:Key ;
+  rdfs:label "key"@en ;
+  rdfs:comment "Key context for the Roman numeral."@en .
+
+so:rnMode a owl:DatatypeProperty ;
+  rdfs:domain so:RomanNumeral ; rdfs:range xsd:string ;
+  rdfs:label "mode"@en ;
+  rdfs:comment "Mode for the Roman numeral context (e.g., major/minor)."@en .
+
+#################################################################
+# MELODY
+#################################################################
+
+so:MelodicProgression a owl:Class ;
+  rdfs:label "Melodic progression"@en ;
+  rdfs:comment "A sequence of notes forming a melodic line."@en .
+
+so:hasMelodicNote a owl:ObjectProperty ;
+  rdfs:domain so:MelodicProgression ; rdfs:range mso:Note ;
+  rdfs:label "has note (melodic)"@en ;
+  rdfs:comment "Note that belongs to the melodic progression."@en .
+
+so:isMelodicNoteOf a owl:ObjectProperty ;
+  rdfs:domain mso:Note ; rdfs:range so:MelodicProgression ;
+  rdfs:label "is melodic note of"@en ;
+  rdfs:comment "melodic progression of a note."@en ;
+  owl:inverseOf so:hasMelodicNote .
+
+#################################################################
+# EXPRESSION
+#################################################################
+# (mso:Dynamic, mso:Articulation)
+
+so:value a owl:DatatypeProperty ;
+  rdfs:domain mso:Dynamic ; rdfs:range xsd:string ;
+  rdfs:label "value"@en ;
+  rdfs:comment "Dynamic value (e.g., p, mf, crescendo)."@en .
+
+so:hasArticulation a owl:ObjectProperty ;
+  rdfs:domain mso:Note ; rdfs:range mso:Articulation ;
+  rdfs:label "has articulation"@en ;
+  rdfs:comment "Articulation marking attached to the note (e.g., staccato, accent)."@en .
+
+so:isArticulationOf a owl:ObjectProperty ;
+  rdfs:domain mso:Articulation ; rdfs:range mso:Note ;
+  rdfs:label "is articulation of"@en ;
+  rdfs:comment "Articulation of a note (e.g., staccato, accent)."@en ;
+  owl:inverseOf so:hasArticulation .
+
+so:hasDynamic a owl:ObjectProperty ;
+  rdfs:domain mso:Note ; rdfs:range mso:Dynamic ;
+  rdfs:label "has dynamic"@en ;
+  rdfs:comment "Dynamic attached to the note (e.g., ff, fff, p, pp, ppp)."@en .
+
+so:isDynamicOf a owl:ObjectProperty ;
+  rdfs:domain mso:Dynamic ; rdfs:range mso:Note ;
+  rdfs:label "is dynamic of"@en ;
+  rdfs:comment "Dynamic of a note (e.g., ff, fff, p, pp, ppp)."@en .
+
+##### SUB CLASSES // INSTANCES  #####
+
+# PITCHES
+#################################################################
+so:A a owl:Class ;
+  rdfs:subClassOf so:Pitch ;
+  rdfs:label "A"@en ;
+  rdfs:comment "Diatonic pitch name A (natural)."@en .
+
+so:B a owl:Class ;
+  rdfs:subClassOf so:Pitch ;
+  rdfs:label "B"@en ;
+  rdfs:comment "Diatonic pitch name B (natural)."@en .
+
+so:C a owl:Class ;
+  rdfs:subClassOf so:Pitch ;
+  rdfs:label "C"@en ;
+  rdfs:comment "Diatonic pitch name C (natural)."@en .
+
+so:D a owl:Class ;
+  rdfs:subClassOf so:Pitch ;
+  rdfs:label "D"@en ;
+  rdfs:comment "Diatonic pitch name D (natural)."@en .
+
+so:E a owl:Class ;
+  rdfs:subClassOf so:Pitch ;
+  rdfs:label "E"@en ;
+  rdfs:comment "Diatonic pitch name E (natural)."@en .
+
+so:F a owl:Class ;
+  rdfs:subClassOf so:Pitch ;
+  rdfs:label "F"@en ;
+  rdfs:comment "Diatonic pitch name F (natural)."@en .
+
+so:G a owl:Class ;
+  rdfs:subClassOf so:Pitch ;
+  rdfs:label "G"@en ;
+  rdfs:comment "Diatonic pitch name G (natural)."@en .
+
+#DURATIONS
+#################################################################
+
+so:WholeNote a owl:Class ;
+  rdfs:subClassOf so:Duration ;
+  rdfs:label "whole note"@en ;
+  rdfs:comment "Whole note (semibreve; 'redonda')."@en .
+
+so:HalfNote a owl:Class ;
+  rdfs:subClassOf so:Duration ;
+  rdfs:label "half note"@en ;
+  rdfs:comment "Half note (minim; 'blanca')."@en .
+
+so:QuarterNote a owl:Class ;
+  rdfs:subClassOf so:Duration ;
+  rdfs:label "quarter note"@en ;
+  rdfs:comment "Quarter note (crotchet; 'negra')."@en .
+
+so:EighthNote a owl:Class ;
+  rdfs:subClassOf so:Duration ;
+  rdfs:label "eighth note"@en ;
+  rdfs:comment "Eighth note (quaver; 'corchea')."@en .
+
+so:SixteenthNote a owl:Class ;
+  rdfs:subClassOf so:Duration ;
+  rdfs:label "sixteenth note"@en ;
+  rdfs:comment "Sixteenth note (semiquaver; 'semicorchea')."@en .
+
+so:ThirtySecondNote a owl:Class ;
+  rdfs:subClassOf so:Duration ;
+  rdfs:label "thirty-second note"@en ;
+  rdfs:comment "Thirty-second note (demisemiquaver; 'fusa')."@en .
+
+so:SixtyFourthNote a owl:Class ;
+  rdfs:subClassOf so:Duration ;
+  rdfs:label "sixty-fourth note"@en ;
+  rdfs:comment "Sixty-fourth note (hemidemisemiquaver; 'semifusa')."@en .
+
+so:DottedHalf a owl:Class ;
+  rdfs:subClassOf so:Duration ;
+  rdfs:label "dotted half"@en ;
+  rdfs:comment "Dotted half note (adds 1/2 of the value)."@en .
+
+so:DottedQuarter a owl:Class ;
+  rdfs:subClassOf so:Duration ;
+  rdfs:label "dotted quarter"@en ;
+  rdfs:comment "Dotted quarter note (adds 1/2 of the value)."@en .
+
+so:DottedEighth a owl:Class ;
+  rdfs:subClassOf so:Duration ;
+  rdfs:label "dotted eighth"@en ;
+  rdfs:comment "Dotted eighth note (adds 1/2 of the value)."@en .
 
 
-###  http://example.org/sonata#Expression
-:Expression rdf:type owl:Class ;
-            rdfs:comment "Abstract class for expressive elements, such as Dynamic."@en ;
-            rdfs:label "Expression"@en .
+# ACCIDENTALS (ALTERATIONS)
+#################################################################
+
+so:Sharp a owl:Class ;
+  rdfs:subClassOf so:Accidental ;
+  rdfs:label "Sharp"@en ;
+  rdfs:comment "Sharp accidental, raises a pitch by a half-step."@en .
+
+so:Flat a owl:Class ;
+  rdfs:subClassOf so:Accidental ;
+  rdfs:label "Flat"@en ;
+  rdfs:comment "Flat accidental, lowers a pitch by a half-step."@en .
+
+so:Natural a owl:Class ;
+  rdfs:subClassOf so:Accidental ;
+  rdfs:label "Natural"@en ;
+  rdfs:comment "Natural accidental, cancels a previous sharp or flat."@en .
+
+# CLEFS
+#################################################################
+
+so:TrebleClef a owl:Class ;
+  rdfs:subClassOf mso:Clef ;
+  rdfs:label "Treble clef (G clef)"@en ;
+  rdfs:comment "G clef on line 2; typical right-hand staff in piano."@en .
+
+so:BassClef a owl:Class ;
+  rdfs:subClassOf mso:Clef ;
+  rdfs:label "Bass clef (F clef)"@en ;
+  rdfs:comment "F clef on line 4; typical left-hand staff in piano."@en .
+
+so:AltoClef a owl:Class ;
+  rdfs:subClassOf mso:Clef ;
+  rdfs:label "Alto clef (C clef)"@en ;
+  rdfs:comment "C clef on line 3; centers C4 on line 3."@en .
+
+so:TenorClef a owl:Class ;
+  rdfs:subClassOf mso:Clef ;
+  rdfs:label "Tenor clef (C clef)"@en ;
+  rdfs:comment "C clef on line 4; centers C4 on line 4."@en .
+
+# TIME SIGNATURE
+#################################################################
+
+so:TS_4_4 a owl:Class ;
+  rdfs:subClassOf mso:TimeSignature ;
+  rdfs:label "4/4 time"@en ;
+  rdfs:comment "Simple quadruple; common time."@en .
+
+so:TS_3_4 a owl:Class ;
+  rdfs:subClassOf mso:TimeSignature ;
+  rdfs:label "3/4 time"@en ;
+  rdfs:comment "Simple triple; waltz meter."@en .
+
+so:TS_2_2 a owl:Class ;
+  rdfs:subClassOf mso:TimeSignature ;
+  rdfs:label "2/2 time (alla breve)"@en ;
+  rdfs:comment "Cut time; simple duple with half-note beat."@en .
+
+so:TS_2_4 a owl:Class ;
+  rdfs:subClassOf mso:TimeSignature ;
+  rdfs:label "2/4 time"@en ;
+  rdfs:comment "Simple duple; two quarter-note."@en .
+
+#################################################################
+# TEMPO MARKINGS
+#################################################################
+
+so:Largo a owl:Class ;
+  rdfs:subClassOf so:Tempo ;
+  rdfs:label "Largo"@en ;
+  rdfs:comment "Very slow tempo (indicative ~40–60 BPM)."@en .
+
+so:Adagio a owl:Class ;
+  rdfs:subClassOf so:Tempo ;
+  rdfs:label "Adagio"@en ;
+  rdfs:comment "Slow tempo (~66–76 BPM typical)."@en .
+
+so:Andante a owl:Class ;
+  rdfs:subClassOf so:Tempo ;
+  rdfs:label "Andante"@en ;
+  rdfs:comment "Walking tempo (~76–108 BPM typical)."@en .
+
+so:Moderato a owl:Class ;
+  rdfs:subClassOf so:Tempo ;
+  rdfs:label "Moderato"@en ;
+  rdfs:comment "Moderate tempo (~96–112 BPM typical)."@en .
+
+so:Allegro a owl:Class ;
+  rdfs:subClassOf so:Tempo ;
+  rdfs:label "Allegro"@en ;
+  rdfs:comment "Fast tempo (~120–156 BPM typical)."@en .
+
+so:Vivace a owl:Class ;
+  rdfs:subClassOf so:Tempo ;
+  rdfs:label "Vivace"@en ;
+  rdfs:comment "Lively; very fast (~140–176 BPM typical)."@en .
+
+so:Presto a owl:Class ;
+  rdfs:subClassOf so:Tempo ;
+  rdfs:label "Presto"@en ;
+  rdfs:comment "Very fast (~168–200 BPM typical)."@en .
+
+so:Acellerando a owl:Class ;
+  rdfs:subClassOf so:Tempo ;
+  rdfs:label "Acelerando"@en ;
+  rdfs:comment "Gradually increasing the tempo."@en .
+
+so:Ritardando a owl:Class ;
+  rdfs:subClassOf so:Tempo ;
+  rdfs:label "Ritardando"@en ;
+  rdfs:comment "Gradually decreasing the tempo."@en .
+
+so:PocoAPoco a owl:Class ;
+  rdfs:subClassOf so:Tempo ;
+  rdfs:label "Poco a poco"@en ;
+  rdfs:comment "Slowly; an instruction to gradually decrease speed."@en .
+
+# KEYS AND KEY SIGNATURES 
+#################################################################
+
+so:Cmaj a so:KeySignature ;
+  rdfs:subClassOf so:KeySignature ;
+  rdfs:label "C major key signature"@en ;
+  so:fifths 0 ; so:mode "major" ; so:tonality so:Key_Cmaj .
+
+so:Gmaj a so:KeySignature ;
+  rdfs:subClassOf so:KeySignature ;
+  rdfs:label "G major key signature"@en ;
+  so:fifths 1 ; so:mode "major" ; so:tonality so:Key_Gmaj .
+
+so:Dmaj a so:KeySignature ;
+  rdfs:subClassOf so:KeySignature ;
+  rdfs:label "D major key signature"@en ;
+  so:fifths 2 ; so:mode "major" ; so:tonality so:Key_Dmaj .
+
+so:Amaj a so:KeySignature ;
+  rdfs:subClassOf so:KeySignature ;
+  rdfs:label "A major key signature"@en ;
+  so:fifths 3 ; so:mode "major" ; so:tonality so:Key_Amaj .
+
+so:Emaj a so:KeySignature ;
+  rdfs:subClassOf so:KeySignature ;
+  rdfs:label "E major key signature"@en ;
+  so:fifths 4 ; so:mode "major" ; so:tonality so:Key_Emaj .
+
+so:Bmaj a so:KeySignature ;
+  rdfs:subClassOf so:KeySignature ;
+  rdfs:label "B major key signature"@en ;
+  so:fifths 5 ; so:mode "major" ; so:tonality so:Key_Bmaj .
+
+so:FSharp_maj a so:KeySignature ;
+  rdfs:subClassOf so:KeySignature ;
+  rdfs:label "F# major key signature"@en ;
+  so:fifths 6 ; so:mode "major" ; so:tonality so:Key_FSharp_maj .
+
+so:CSharp_maj a so:KeySignature ;
+  rdfs:subClassOf so:KeySignature ;
+  rdfs:label "C# major key signature"@en ;
+  so:fifths 7 ; so:mode "major" ; so:tonality so:Key_CSharp_maj .
+
+so:Fmaj a so:KeySignature ;
+  rdfs:subClassOf so:KeySignature ;
+  rdfs:label "F major key signature"@en ;
+  so:fifths -1 ; so:mode "major" ; so:tonality so:Key_Fmaj .
+
+so:BFlat_maj a so:KeySignature ;
+  rdfs:subClassOf so:KeySignature ;
+  rdfs:label "B♭ major key signature"@en ;
+  so:fifths -2 ; so:mode "major" ; so:tonality so:Key_BFlat_maj .
+
+so:EFlat_maj a so:KeySignature ;
+  rdfs:subClassOf so:KeySignature ;
+  rdfs:label "E♭ major key signature"@en ;
+  so:fifths -3 ; so:mode "major" ; so:tonality so:Key_EFlat_maj .
+
+so:AFlat_maj a so:KeySignature ;
+  rdfs:subClassOf so:KeySignature ;
+  rdfs:label "A♭ major key signature"@en ;
+  so:fifths -4 ; so:mode "major" ; so:tonality so:Key_AFlat_maj .
+
+so:Amin a so:KeySignature ;
+  rdfs:subClassOf so:KeySignature ;
+  rdfs:label "A minor key signature"@en ;
+  so:fifths 0 ; so:mode "minor" ; so:tonality so:Key_Amin .
+
+so:Emin a so:KeySignature ;
+  rdfs:subClassOf so:KeySignature ;
+  rdfs:label "E minor key signature"@en ;
+  so:fifths 1 ; so:mode "minor" ; so:tonality so:Key_Emin .
+
+so:Bmin a so:KeySignature ;
+  rdfs:subClassOf so:KeySignature ;
+  rdfs:label "B minor key signature"@en ;
+  so:fifths 2 ; so:mode "minor" ; so:tonality so:Key_Bmin .
+
+# ARTICULATIONS
+#################################################################
+
+so:Staccato a owl:Class ;
+  rdfs:subClassOf mso:Articulation ;
+  rdfs:label "Staccato"@en ;
+  rdfs:comment "Detached, short note articulation."@en .
+
+so:Tenuto a owl:Class ;
+  rdfs:subClassOf mso:Articulation ;
+  rdfs:label "Tenuto"@en ;
+  rdfs:comment "Sustained to full value; slight emphasis."@en .
+
+so:Accent a owl:Class ;
+  rdfs:subClassOf mso:Articulation ;
+  rdfs:label "Accent"@en ;
+  rdfs:comment "Marked emphasis at the start of the note."@en .
+
+so:Legato a owl:Class ;
+  rdfs:subClassOf mso:Articulation ;
+  rdfs:label "Legato"@en ;
+  rdfs:comment "Smoothly connected; no perceptible breaks."@en .
+
+# DYNAMICS
+#################################################################
+
+so:ppp a owl:Class ;
+  rdfs:subClassOf mso:Dynamic ;
+  rdfs:label "ppp"@en ;
+  rdfs:comment "Pianississimo; very, very soft."@en .
+
+so:pp a owl:Class ;
+  rdfs:subClassOf mso:Dynamic ;
+  rdfs:label "pp"@en ;
+  rdfs:comment "Pianissimo; very soft."@en .
+
+so:p a owl:Class ;
+  rdfs:subClassOf mso:Dynamic ;
+  rdfs:label "p"@en ;
+  rdfs:comment "Piano; soft."@en .
+
+so:mp a owl:Class ;
+  rdfs:subClassOf mso:Dynamic ;
+  rdfs:label "mp"@en ;
+  rdfs:comment "Mezzo-piano; moderately soft."@en .
+
+so:mf a owl:Class ;
+  rdfs:subClassOf mso:Dynamic ;
+  rdfs:label "mf"@en ;
+  rdfs:comment "Mezzo-forte; moderately loud."@en .
+
+so:f a owl:Class ;
+  rdfs:subClassOf mso:Dynamic ;
+  rdfs:label "f"@en ;
+  rdfs:comment "Forte; loud."@en .
+
+so:ff a owl:Class ;
+  rdfs:subClassOf mso:Dynamic ;
+  rdfs:label "ff"@en ;
+  rdfs:comment "Fortissimo; very loud."@en .
+
+so:fff a owl:Class ;
+  rdfs:subClassOf mso:Dynamic ;
+  rdfs:label "fff"@en ;
+  rdfs:comment "Fortississimo; extremely loud."@en .
+
+#####RESTRICTIONS
+
+#Every work must have at lest one movement
+mo:MusicalWork rdfs:subClassOf
+  [ a owl:Restriction ; owl:onProperty so:hasMovement ; owl:someValuesFrom mso:Movement ] ,
+  [ a owl:Restriction ; owl:onProperty so:hasKey ; owl:allValuesFrom mto:Key ] .
+
+#Every mvt must have at lest one sctn
+mso:Movement rdfs:subClassOf
+  [ a owl:Restriction ; owl:onProperty so:hasSection ; owl:someValuesFrom mno:Section ] ,
+  [ a owl:Restriction ; owl:onProperty so:hasSection ; owl:allValuesFrom mno:Section ] .
+
+#Every sctn must have at lest one phrase
+mno:Section rdfs:subClassOf
+  [ a owl:Restriction ; owl:onProperty so:hasPhrase ; owl:someValuesFrom so:Phrase ] ,
+  [ a owl:Restriction ; owl:onProperty so:hasPhrase ; owl:allValuesFrom so:Phrase ] .
+
+#Every phrase has star and end measure, and at least one measure
+so:Phrase rdfs:subClassOf
+  [ a owl:Restriction ; owl:onProperty so:hasMeasure ;   owl:someValuesFrom mso:Measure ] ,
+  [ a owl:Restriction ; owl:onProperty so:startMeasure ; owl:someValuesFrom mso:Measure ] ,
+  [ a owl:Restriction ; owl:onProperty so:endMeasure ;   owl:someValuesFrom mso:Measure ] .
+
+# Every measure must have a time signature; if it hasTimeSignature
+mso:Measure rdfs:subClassOf
+  [ a owl:Restriction ; owl:onProperty so:number ; owl:minCardinality "1"^^xsd:nonNegativeInteger ] ,
+  [ a owl:Restriction ; owl:onProperty so:hasTimeSignature ; owl:allValuesFrom mso:TimeSignature ] .
+
+#Note and Rest have the same ObjectProperty of SymbolicEvent
+ho:SymbolicEvent rdfs:subClassOf
+  [ a owl:Restriction ; owl:onProperty so:measure ;     owl:cardinality "1"^^xsd:nonNegativeInteger ] ,
+  [ a owl:Restriction ; owl:onProperty so:hasDuration ; owl:someValuesFrom so:Duration ] .
+
+mso:Note rdfs:subClassOf
+  [ a owl:Restriction ; owl:onProperty so:hasPitch ; owl:someValuesFrom so:Pitch ] ,
+  [ a owl:Restriction ; owl:onProperty so:hasPitch ; owl:allValuesFrom  so:Pitch ] .
 
 
-###  http://example.org/sonata#Harmony
-:Harmony rdf:type owl:Class ;
-         rdfs:comment "Abstract class for harmony-related elements, such as Key, RomanNumeral, ChordProgression."@en ;
-         rdfs:label "Harmony"@en .
+so:Pitch rdfs:subClassOf
+  [ a owl:Restriction ; owl:onProperty so:hasAccidental ; owl:allValuesFrom so:Accidental ] .
+
+co:Chord rdfs:subClassOf
+  [ a owl:Restriction ; owl:onProperty so:chordMeasure ;   owl:allValuesFrom mso:Measure ] ,
+  [ a owl:Restriction ; owl:onProperty so:hasRomanNumeral ; owl:allValuesFrom so:RomanNumeral ] .
+
+co:Chord rdfs:subClassOf
+  [ a owl:Restriction ;
+    owl:onProperty              so:hasNoteInChord ;
+    owl:minQualifiedCardinality "2"^^xsd:nonNegativeInteger ;
+    owl:onClass                 mso:Note
+  ] .
 
 
-###  http://example.org/sonata#Key
-:Key rdf:type owl:Class ;
-     rdfs:subClassOf :Harmony ;
-     rdfs:comment "A key context (tonic + mode), for a piece or segment."@en ;
-     rdfs:label "Key"@en .
+so:HarmonicProgression rdfs:subClassOf
+  [ a owl:Restriction ; owl:onProperty so:hasChord ;
+    owl:minQualifiedCardinality "2"^^xsd:nonNegativeInteger ;
+    owl:onClass co:Chord
+  ] .
+
+so:Tempo rdfs:subClassOf
+  [ a owl:Restriction ; owl:onProperty so:tempoOf ; owl:allValuesFrom mso:Measure ] .
+
+so:KeySignature rdfs:subClassOf
+  [ a owl:Restriction ; owl:onProperty so:isKeySignatureOfMeasure ; owl:allValuesFrom mso:Measure ] .
 
 
-###  http://example.org/sonata#KeySignature
-:KeySignature rdf:type owl:Class ;
-              rdfs:subClassOf :MusicNotation ;
-              rdfs:comment "A key signature with sharps/flats and mode."@en ;
-              rdfs:label "Key Signature"@en .
+### Disjointness 
 
+[ a owl:AllDisjointClasses ;
+  owl:members ( so:Exposition so:Development so:Recapitulation )
+] .
 
-###  http://example.org/sonata#Measure
-:Measure rdf:type owl:Class ;
-         rdfs:subClassOf :Structure ;
-         rdfs:comment "A bar of music, grouping notes, rests, chords, and local attributes."@en ;
-         rdfs:label "Measure"@en .
+[ a owl:AllDisjointClasses ;
+  owl:members ( so:ppp so:pp so:p so:mp so:mf so:f so:ff so:fff )
+] .
 
+[ a owl:AllDisjointClasses ;
+  owl:members ( so:Staccato so:Tenuto so:Accent so:Legato )
+] .
 
-###  http://example.org/sonata#MelodicProgression
-:MelodicProgression rdf:type owl:Class ;
-                    rdfs:subClassOf :Melody ;
-                    rdfs:comment "A sequence of melodic elements over time."@en ;
-                    rdfs:label "Melodic Progression"@en .
+[ a owl:AllDisjointClasses ;
+  owl:members ( so:A so:B so:C so:D so:E so:F so:G )
+] .
 
+[ a owl:AllDisjointClasses ;
+  owl:members ( so:WholeNote so:HalfNote so:QuarterNote so:EighthNote
+                so:SixteenthNote so:ThirtySecondNote so:SixtyFourthNote
+                so:DottedHalf so:DottedQuarter so:DottedEighth )
+] .
 
-###  http://example.org/sonata#Melody
-:Melody rdf:type owl:Class ;
-        rdfs:comment "Abstract class for melodic elements, such as Motif and MelodicProgression."@en ;
-        rdfs:label "Melody"@en .
+### ----- PHRASE / SECTION -----
 
+# Section → Measure
+so:sectionHasMeasure a owl:ObjectProperty ;
+  rdfs:domain mno:Section ; rdfs:range mso:Measure ;
+  rdfs:label "section has measure"@en ;
+  owl:propertyChainAxiom ( so:hasPhrase so:hasMeasure ) .
 
-###  http://example.org/sonata#Metadata
-:Metadata rdf:type owl:Class ;
-          rdfs:comment "General metadata for the score, including title, instrument, tonality, total measures, and global key."@en ;
-          rdfs:label "Metadata"@en .
+# Phrase → SymbolicEvent
+so:phraseHasSymbolicEvent a owl:ObjectProperty ;
+  rdfs:domain so:Phrase ; rdfs:range ho:SymbolicEvent ;
+  rdfs:label "phrase has symbolic event"@en ;
+  owl:propertyChainAxiom ( so:hasMeasure so:hasSymbolicEvent ) .
 
+# Section → SymbolicEvent
+so:sectionHasSymbolicEvent a owl:ObjectProperty ;
+  rdfs:domain mno:Section ; rdfs:range ho:SymbolicEvent ;
+  rdfs:label "section has symbolic event"@en ;
+  owl:propertyChainAxiom ( so:hasPhrase so:hasMeasure so:hasSymbolicEvent ) .
 
-###  http://example.org/sonata#Motif
-:Motif rdf:type owl:Class ;
-       rdfs:subClassOf :Melody ;
-       rdfs:comment "A short musical idea or figure, a fundamental unit of musical structure."@en ;
-       rdfs:label "Motif"@en .
+### ----- MOVEMENT -----
 
+# Movement → Measure
+so:movementHasMeasure a owl:ObjectProperty ;
+  rdfs:domain mso:Movement ; rdfs:range mso:Measure ;
+  rdfs:label "movement has measure"@en ;
+  owl:propertyChainAxiom ( so:hasSection so:hasPhrase so:hasMeasure ) .
 
-###  http://example.org/sonata#Movement
-:Movement rdf:type owl:Class ;
-          rdfs:subClassOf :Structure ;
-          rdfs:comment "A self-contained division of a larger work (e.g. a sonata movement)."@en ;
-          rdfs:label "Movement"@en .
+# Movement → SymbolicEvent
+so:movementHasSymbolicEvent a owl:ObjectProperty ;
+  rdfs:domain mso:Movement ; rdfs:range ho:SymbolicEvent ;
+  rdfs:label "movement has symbolic event"@en ;
+  owl:propertyChainAxiom ( so:hasSection so:hasPhrase so:hasMeasure so:hasSymbolicEvent ) .
 
+# Movement → Chord
+so:movementHasChord a owl:ObjectProperty ;
+  rdfs:domain mso:Movement ; rdfs:range co:Chord ;
+  rdfs:label "movement has chord"@en ;
+  owl:propertyChainAxiom ( so:hasSection so:hasPhrase so:hasMeasure so:measureHasChord ) .
 
-###  http://example.org/sonata#MusicNotation
-:MusicNotation rdf:type owl:Class ;
-               rdfs:comment "Abstract class for musical notation elements, such as Note, Rest, Chord, Clef, Tempo, etc."@en ;
-               rdfs:label "Music Notation"@en .
+### ----- WORK (obra) -----
 
+# Work → Measure
+so:workHasMeasure a owl:ObjectProperty ;
+  rdfs:domain mo:MusicalWork ; rdfs:range mso:Measure ;
+  rdfs:label "work has measure"@en ;
+  owl:propertyChainAxiom ( so:hasMovement so:movementHasMeasure ) .
 
-###  http://example.org/sonata#Note
-:Note rdf:type owl:Class ;
-      rdfs:subClassOf :MusicNotation ;
-      rdfs:comment "A musical note event, with pitch, octave, duration, dynamic, articulation, etc."@en ;
-      rdfs:label "Note"@en .
+# Work → SymbolicEvent
+so:workHasSymbolicEvent a owl:ObjectProperty ;
+  rdfs:domain mo:MusicalWork ; rdfs:range ho:SymbolicEvent ;
+  rdfs:label "work has symbolic event"@en ;
+  owl:propertyChainAxiom ( so:workHasMeasure so:hasSymbolicEvent ) .
 
+# Section → Chord
+so:sectionHasChord a owl:ObjectProperty ;
+  rdfs:domain mno:Section ; rdfs:range co:Chord ;
+  rdfs:label "section has chord"@en ;
+  owl:propertyChainAxiom ( so:hasPhrase so:hasMeasure so:measureHasChord ) .
 
-###  http://example.org/sonata#Phrase
-:Phrase rdf:type owl:Class ;
-        rdfs:subClassOf :Structure ;
-        rdfs:comment "A musical phrase, defined by its starting and ending measures."@en ;
-        rdfs:label "Phrase"@en .
-
-
-###  http://example.org/sonata#Rest
-:Rest rdf:type owl:Class ;
-      rdfs:subClassOf :MusicNotation ;
-      rdfs:comment "A period of silence in a measure."@en ;
-      rdfs:label "Rest"@en .
-
-
-###  http://example.org/sonata#RomanNumeral
-:RomanNumeral rdf:type owl:Class ;
-              rdfs:subClassOf :Harmony ;
-              rdfs:comment "Roman numeral harmonic analysis for a chord."@en ;
-              rdfs:label "Roman Numeral"@en .
-
-
-###  http://example.org/sonata#Section
-:Section rdf:type owl:Class ;
-         rdfs:subClassOf :Structure ;
-         rdfs:comment "A large segment of a musical work, such as Exposition or Development."@en ;
-         rdfs:label "Section"@en .
-
-
-###  http://example.org/sonata#Structure
-:Structure rdf:type owl:Class ;
-           rdfs:comment "Abstract class for musical structure, such as Measure, Phrase, Section, Movement."@en ;
-           rdfs:label "Structure"@en .
-
-
-###  http://example.org/sonata#Tempo
-:Tempo rdf:type owl:Class ;
-       rdfs:subClassOf :MusicNotation ;
-       rdfs:comment "A tempo indication (metronome mark or text)."@en ;
-       rdfs:label "Tempo"@en .
-
-
-###  http://example.org/sonata#TimeSignature
-:TimeSignature rdf:type owl:Class ;
-               rdfs:subClassOf :MusicNotation ;
-               rdfs:comment "A time signature, defined by numerator, denominator, and symbol."@en ;
-               rdfs:label "Time Signature"@en .
-
-
-###  Generated by the OWL API (version 4.5.29.2024-05-13T12:11:03Z) https://github.com/owlcs/owlapi
+# Work → Chord
+so:workHasChord a owl:ObjectProperty ;
+  rdfs:domain mo:MusicalWork ; rdfs:range co:Chord ;
+  rdfs:label "work has chord"@en ;
+  owl:propertyChainAxiom ( so:workHasMeasure so:measureHasChord ) .
