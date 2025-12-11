@@ -1,84 +1,172 @@
-# Sonata-Ontology
-This repository provides a complete pipeline for converting Beethoven piano sonata scores in MusicXML format into a rich RDF (Resource Description Framework) representation, suitable for semantic analysis, knowledge extraction, and ontological modeling of musical structure. The pipeline processes raw scores through a series of Python scripts, extracting metadata, detailed musical elements, structural information, and exporting everything as RDF/Turtle files using a custom ontology named SONATA ONTOLOGY.
+# Sonata Ontology – Processing and Instantiation Pipeline
 
-## Requirements
+This repository contains the processing pipeline and resources used to instantiate **Sonata Ontology** from a corpus of piano sonatas encoded in `MusicXML`.
 
-- Python 3.8+
-- [music21](https://web.mit.edu/music21/)  
-- [rdflib](https://rdflib.readthedocs.io/)
+**Sonata Ontology** is a domain ontology designed to represent, in a structured and interoperable way:
 
-Install dependencies with:
-```bash
-pip install -r requirements.txt
-```
-## Processing Pipeline
+- Work-level metadata (title, composer, opus, etc.),
+- Formal structure (movements, sections, measures),
+- Symbolic notation (notes, rests, durations, clefs, key signatures, time signatures, tempi),
+- Harmonic and melodic information,
+- Expressive markings (dynamics, articulations),
+- And a dedicated **Technical Complexity Profile**:
+  - local complexity by measure (Local Complexity Index, LCI),
+  - and global complexity by movement (Global Complexity Index, GCI).
 
-All steps are automated by the `process_sonata.sh` Bash script. The pipeline for each MusicXML score is as follows:
+The pipeline in this repository converts raw `MusicXML` scores into enriched **RDF graphs** that conform to Sonata Ontology, passing through an intermediate **JSON-LD** representation.
 
-1. **Extract Metadata**  
-   Script: `metadata.py`  
-   Reads the MusicXML file and generates basic metadata: title, instrument, total measures.  
+---
+
+## High-level Workflow
+
+At a high level, the processing workflow is:
+
+1. **Input**: a set of piano sonatas in `MusicXML` format.
+2. **Incremental enrichment in JSON-LD**:  
+   Several Python scripts read each `MusicXML` file and progressively enrich a corresponding `JSON-LD` file with:
+   - metadata,
+   - structural information,
+   - musical notation,
+   - expressive markings,
+   - and technical complexity metrics.
+3. **Export to RDF/Turtle**:  
+   Once the JSON-LD representation is complete, it is converted into `TTL` (Turtle) files, which can be loaded into a triplestore (e.g., GraphDB) and queried with SPARQL.
+
+The repository also includes **example JSON-LD and TTL files**, illustrating the final structure of the instantiated data for a sample sonata.
+
+---
+
+## Main Components
+
+### Input Scores
+
+- **MusicXML scores directory**  
+  A folder containing piano sonatas in `*.xml` format (e.g., the Beethoven Piano Sonata Dataset).
+  Each file corresponds to a single work (one sonata or one movement, depending on the encoding).
+
+---
+
+### JSON-LD Enrichment Scripts
+
+All JSON-LD files are stored in a directory such as `JSON_LD/`.  
+Each Python script below is responsible for one “layer” of information:
+
+#### `extract_metadata.py`
+
+- Reads a `MusicXML` file.
+- Creates or updates a JSON-LD document for the score.
+- Adds **work-level metadata**, such as:
+  - title,
+  - composer name,
+  - opus number or catalogue identifier,
+  - high-level work identifiers.
+- Instantiates the main `so:Sonata` and its relationship to `mo:MusicalWork`.
+
+#### `extract_structure.py`
+
+- Enriches the JSON-LD file with **formal structure**:
+  - movements (instances of `so:SonataMovement`),
+  - measures (instances of `mso:Measure`),
+  - links between work, movements and measures.
+- Ensures that each measure is uniquely identified and associated with its movement.
+
+#### `extract_music_notation.py`
+
+- Adds **symbolic notation** to the JSON-LD graph:
+  - notes and rests as symbolic events,
+  - durations (note types and their values),
+  - clefs, key signatures, and time signatures,
+  - tempi associated to measures where relevant.
+- Connects these elements with the appropriate measures and staves, following the structure defined in Sonata Ontology and related vocabularies (e.g., MSO, MTO, HaMSE).
+
+#### `extract_expression.py`
+
+- Focuses on **expressive information**:
+  - dynamic markings (e.g., `p`, `f`, `ff`, `sf`, `sfp`, etc.),
+  - articulations (in particular, `staccato` in the current version).
+- Associates each expressive marking with the corresponding symbolic event and measure.
+- Populates classes such as `so:LoudnessDynamic` and `so:Staccato`, and their linking properties.
+
+#### `extract_technical_complexity_profile.py`
+
+- Computes and encodes the **Technical Complexity Profile** for each measure and movement.
+- For every `mso:Measure`, it calculates raw metrics such as:
+  - `so:noteCount` (number of notes),
+  - `so:measureAccidentalCount` (number of accidentals),
+  - `so:subdivisionIndex` (rhythmic subdivision relative to the beat),
+  - `so:minNoteValue` (smallest note value in the measure),
+  - `so:dynamicCount` (number of dynamic markings),
+  - `so:articulationCount` (number of relevant articulations).
+- These metrics are normalized and combined into a **Local Complexity Index** (`so:LCIvalue`), stored in a `so:LocalComplexityIndex` instance linked to each measure.
+- For each `so:SonataMovement`, it averages the LCIs across its measures to obtain a **Global Complexity Index** (`so:globalComplexityIndex`), encapsulated in a `so:GlobalComplexityProfile` instance.
+
+The result of running all these scripts is an enriched JSON-LD graph for each score, containing both structural/expressive information and computed complexity indices.
+
+---
+
+### RDF Export
+
+#### `jsonld_to_ttl.py`
+
+- Reads all `.jsonld` files from the `JSON_LD/` directory.
+- Uses `rdflib` (or equivalent) to parse JSON-LD into an RDF graph.
+- Serializes each graph as Turtle (`.ttl`) into the `TTL/` directory.
+- The produced TTL files are ready to be:
+  - loaded into GraphDB (or another RDF store),
+  - queried with SPARQL,
+  - and used for analysis (e.g., identifying the most complex measures or comparing movements by difficulty).
+
+---
+
+## Example Files
+
+The repository includes:
+
+- An **example JSON-LD file** showing the enriched representation of a processed sonata (including metadata, structure, notation, expression and technical complexity metrics).
+- An **example TTL file** showing the final RDF/Turtle encoding of the same work.
+
+These examples can be used as:
+
+- a reference to understand how Sonata Ontology is instantiated,
+- a template for building SPARQL queries,
+- and a sanity check when modifying or extending the pipeline.
+
+---
+
+## Installation and Basic Usage
+
+1. **Create and activate a virtual environment** (recommended):
+
    ```bash
-   python metadata.py <input_xml> <output_metadata.json>
-   ```
+   
+   python3 -m venv venv_sonata
+   source venv_sonata/bin/activate
 
-2. **Extract Elements**  
-   Script: `xml_to_elements_json.py`  
-   Extracts notes, rests, chords, measures, keys, dynamics, clefs, tempos, time signatures, and more. Also enriches metadata with global key and tonality analysis.  
+2. **Install dependencies**:
    ```bash
-   python xml_to_elements_json.py <input_xml> <metadata_json> <output_elements.json>
-   ```
+   pip install --upgrade pip
+   pip install -r requirements.txt
+3. **Run the pipeline** (conceptually):
 
-3. **Detect Phrases (Structure Analysis)**  
-   Script: `structure_analysis.py`  
-   Detects musical phrase boundaries using a novelty function (based on changes in musical content per measure) and exports a list of phrases.  
-   ```bash
-   python structure_analysis.py <elements.json> <phrases.json>
-   ```
+   - For each `MusicXML` file:
+     1. Run `extract_metadata.py`.
+     2. Run `extract_structure.py`.
+     3. Run `extract_music_notation.py`.
+     4. Run `extract_expression.py`.
+     5. Run `extract_technical_complexity_profile.py`.
+   - Then call `jsonld_to_ttl.py` to convert all `JSON_LD/*.jsonld` into `TTL/*.ttl`.
 
-4. **Export to RDF (Turtle)**  
-   Script: `json_to_rdf.py`  
-   Converts the extracted metadata, elements, and phrase structure into RDF/Turtle format using a custom namespace.  
-   ```bash
-   python json_to_rdf.py <json_dir> <namespace_prefix_url> <output.ttl>
-   ```
+A convenience shell script (e.g., `process_sonata.sh`) is provided to orchestrate these steps in batch over a directory of scores, but the core logic resides in the Python scripts described above.
 
-## Automated Processing
+---
 
-To process all XML files in bulk, use:
-```bash
-bash process_sonata.sh
-```
-This will:
-- Create all necessary output folders.
-- Process every XML file, extracting data and exporting one `.ttl` RDF file per score into the `TTL/` directory.
-- The namespace prefix used is customizable in the script.
+## Using the Resulting RDF Data
 
-## Output
+Once the TTL files are generated, they can be imported into a triplestore such as **GraphDB**. From there, Sonata Ontology supports:
 
-For each score, the pipeline produces:
-- `metadata.json` — Basic metadata
-- `elements.json` — Full musical structure and content
-- `phrases.json` — Locations of musical phrases
-- `<score_name>.ttl` — RDF/Turtle representation with all data, suitable for SPARQL queries and ontological analysis
+- Queries about **global information** (key, tempi, time signatures, number of measures),
+- Queries about **local technical difficulty** (e.g., measures with highest LCI, measures with many accidentals or dense rhythms),
+- Queries about **expressivity** (distribution of dynamics and articulations),
+- And combined views that relate formal structure, notation, expression and complexity.
 
-## Customization
-
-- **Namespace:**  
-  Change the `PREFIX_SO` variable in `process_sonata.sh` to set your own ontology URL prefix.
-- **Input/output paths:**  
-  Modify the paths at the top of the script for custom datasets.
-
-## Semantic Queries and Visualization: Using a Graph Database
-
-After processing, each Beethoven sonata is exported as an **RDF (Turtle)** file encoding musical structure, metadata, and analytical features using a custom ontology. These RDF files can be loaded into a **graph database** (such as [GraphDB](https://www.ontotext.com/products/graphdb/), [Apache Jena Fuseki](https://jena.apache.org/documentation/fuseki2/), or [Blazegraph](https://blazegraph.com/)) to enable:
-
-- **SPARQL Queries:** Query the musical data semantically (e.g., retrieve all phrases in a specific key, list all dynamic markings in a sonata, analyze chord progressions).
-- **Graph Visualization:** Explore and visualize the structural and relational aspects of musical works, such as networks of phrases, relationships between notes and chords, and metadata connections.
-- **Knowledge Integration:** Combine musical RDF data with other linked data sources for richer analysis.
-
-To experiment with semantic queries and graph visualization:
-
-- Download and install a graph database (e.g., GraphDB Free, Apache Jena Fuseki).
-- Create a new repository (in GraphDB, click "Repositories" > "Create new repository").
-- Upload the sonata_ontology.ttl file and one or more `.ttl` files from the `TTL/` directory to your graph database.
+This RDF representation provides a reproducible, structured and extensible basis for further research, pedagogical tools, and interactive applications built on top of Sonata Ontology.
