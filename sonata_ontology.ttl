@@ -126,6 +126,48 @@ so:hasClef rdf:type owl:ObjectProperty ;
            rdfs:comment "Associates the symbolic event with the clef in effect."@en ;
            rdfs:label "has clef"@en .
 
+###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#DifficultyLevel
+so:DifficultyLevel rdf:type owl:Class ;
+    rdfs:comment "Qualitative difficulty level used to categorize technical complexity profiles (e.g., easy, intermediate, difficult)."@en ;
+    rdfs:label "Difficulty level"@en .
+
+###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#hasDifficultyLevel
+so:hasDifficultyLevel rdf:type owl:ObjectProperty ;
+    rdfs:domain so:TechnicalComplexityProfile ;
+    rdfs:range  so:DifficultyLevel ;
+    rdfs:comment "Associates a technical complexity profile (local or global) with a qualitative difficulty level."@en ;
+    rdfs:label "has difficulty level"@en .
+
+
+###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#EasyDifficulty
+so:EasyDifficulty rdf:type owl:Class ;
+    rdfs:subClassOf so:DifficultyLevel ;
+    rdfs:comment "Qualitative difficulty level: easy."@en ;
+    rdfs:label "Easy difficulty"@en .
+
+
+###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#IntermediateDifficulty
+so:IntermediateDifficulty rdf:type owl:Class ;
+    rdfs:subClassOf so:DifficultyLevel ;
+    rdfs:comment "Qualitative difficulty level: intermediate."@en ;
+    rdfs:label "Intermediate difficulty"@en .
+
+
+###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#DifficultDifficulty
+so:DifficultDifficulty rdf:type owl:Class ;
+    rdfs:subClassOf so:DifficultyLevel ;
+    rdfs:comment "Qualitative difficulty level: difficult or advanced."@en ;
+    rdfs:label "Difficult difficulty"@en .
+
+
+[ rdf:type owl:AllDisjointClasses ;
+  owl:members ( so:EasyDifficulty
+                so:IntermediateDifficulty
+                so:DifficultDifficulty
+              )
+] .
+
+
 
 ###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#hasDuration
 so:hasDuration rdf:type owl:ObjectProperty ;
@@ -142,6 +184,14 @@ so:hasDynamic rdf:type owl:ObjectProperty ;
               rdfs:range mso:Dynamic ;
               rdfs:comment "Dynamic marking attached to the symbolic event (e.g., ff, p, crescendo)."@en ;
               rdfs:label "has dynamic"@en .
+
+
+###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#hasInstrument
+so:hasInstrument rdf:type owl:ObjectProperty ;
+                 rdfs:domain mo:MusicalWork ;
+                 rdfs:range mo:Instrument ;
+                 rdfs:comment "Relates a musical work to its intended instrument or instrumentation."@en ;
+                 rdfs:label "has instrument"@en .
 
 
 ###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#hasKey
@@ -250,6 +300,14 @@ so:hasSymbolicEvent rdf:type owl:ObjectProperty ;
                     rdfs:label "has symbolic event"@en .
 
 
+###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#hasTechnicalComplexityProfile
+so:hasTechnicalComplexityProfile rdf:type owl:ObjectProperty ;
+                                 rdfs:domain so:SonataMovement ;
+                                 rdfs:range so:TechnicalComplexityProfile ;
+                                 rdfs:comment "Links a sonata movement to an aggregated technical complexity profile computed from its measures."@en ;
+                                 rdfs:label "has technical complexity profile"@en .
+
+
 ###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#hasTempo
 so:hasTempo rdf:type owl:ObjectProperty ;
             owl:inverseOf so:isTempoOf ;
@@ -322,6 +380,15 @@ so:isMeasureOfPhrase rdf:type owl:ObjectProperty ;
                      rdfs:label "is measure of phrase"@en .
 
 
+###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#isMeasureOfStaff
+so:isMeasureOfStaff rdf:type owl:ObjectProperty ;
+                    owl:inverseOf so:staffHasMeasure ;
+                    rdfs:domain mso:Measure ;
+                    rdfs:range mso:Staff ;
+                    rdfs:comment "Inverse relation of staffHasMeasure: links a measure to the staves it belongs to."@en ;
+                    rdfs:label "is measure of staff"@en .
+
+
 ###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#isMelodicNoteOf
 so:isMelodicNoteOf rdf:type owl:ObjectProperty ;
                    rdfs:domain mso:Note ;
@@ -388,6 +455,14 @@ so:movementHasMeasure rdf:type owl:ObjectProperty ;
                                                so:hasMeasure
                                              ) ;
                       rdfs:label "movement has measure"@en .
+
+
+###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#movementHasStaff
+so:movementHasStaff rdf:type owl:ObjectProperty ;
+                    rdfs:domain mso:Movement ;
+                    rdfs:range mso:Staff ;
+                    rdfs:comment "Relates a movement to the staves used in its score ."@en ;
+                    rdfs:label "movement has staff"@en .
 
 
 ###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#movementHasSymbolicEvent
@@ -465,6 +540,31 @@ so:sectionHasSymbolicEvent rdf:type owl:ObjectProperty ;
                            rdfs:label "section has symbolic event"@en .
 
 
+###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#sonataMovementHasPianoStaff
+so:sonataMovementHasPianoStaff rdf:type owl:ObjectProperty ;
+                               rdfs:subPropertyOf so:movementHasStaff ;
+                               rdfs:domain so:SonataMovement ;
+                               rdfs:range so:PianoStaff ;
+                               rdfs:comment "Relates a sonata movement to the piano staves (upper and lower) of its grand staff."@en ;
+                               rdfs:label "sonata movement has piano staff"@en .
+
+
+###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#staffHasClef
+so:staffHasClef rdf:type owl:ObjectProperty ;
+                rdfs:domain mso:Staff ;
+                rdfs:range mso:Clef ;
+                rdfs:comment "Relates a staff to the clefs that define its reference pitch over time."@en ;
+                rdfs:label "staff has clef"@en .
+
+
+###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#staffHasMeasure
+so:staffHasMeasure rdf:type owl:ObjectProperty ;
+                   rdfs:domain mso:Staff ;
+                   rdfs:range mso:Measure ;
+                   rdfs:comment "Relates a staff to the measures that are notated on it."@en ;
+                   rdfs:label "staff has measure"@en .
+
+
 ###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#startMeasure
 so:startMeasure rdf:type owl:ObjectProperty ;
                 rdfs:domain so:StructuralElement ;
@@ -515,14 +615,6 @@ so:workHasSymbolicEvent rdf:type owl:ObjectProperty ;
 #    Data properties
 #################################################################
 
-###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#MovementNumber
-so:MovementNumber rdf:type owl:DatatypeProperty ;
-                  rdfs:domain mso:Movement ;
-                  rdfs:range xsd:integer ;
-                  rdfs:comment "Movement number in the score."@en ;
-                  rdfs:label "Movement number"@en .
-
-
 ###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#accidentalCount
 so:accidentalCount rdf:type owl:DatatypeProperty ;
                    rdfs:domain mto:KeySignature ;
@@ -553,6 +645,14 @@ so:bass rdf:type owl:DatatypeProperty ;
         rdfs:range xsd:string ;
         rdfs:comment "Bass pitch or descriptor for the chord (e.g., E2 or scale-degree notation)."@en ;
         rdfs:label "bass"@en .
+
+
+###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#beatUnit
+so:beatUnit rdf:type owl:DatatypeProperty ;
+            rdfs:domain so:Tempo ;
+            rdfs:range xsd:string ;
+            rdfs:comment "Beat unit in a metronome marking (e.g., 'quarter', 'eighth'), as extracted from MusicXML <beat-unit>."@en ;
+            rdfs:label "beat unit"@en .
 
 
 ###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#bpm
@@ -593,6 +693,14 @@ so:denominator rdf:type owl:DatatypeProperty ;
                rdfs:range xsd:integer ;
                rdfs:comment "Bottom number in the meter (beat unit)."@en ;
                rdfs:label "denominator"@en .
+
+
+###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#dots
+so:dots rdf:type owl:DatatypeProperty ;
+        rdfs:domain so:Duration ;
+        rdfs:range xsd:integer ;
+        rdfs:comment "Number of augmentation dots in the written duration (0, 1, 2, ...), as extracted from MusicXML <dot> elements."@en ;
+        rdfs:label "dots"@en .
 
 
 ###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#dynamicLevel
@@ -649,6 +757,22 @@ so:line rdf:type owl:DatatypeProperty ;
         rdfs:range xsd:integer ;
         rdfs:comment "Reference staff line index used by the clef (e.g., 2 for treble G line)."@en ;
         rdfs:label "line"@en .
+
+
+###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#movementNumber
+so:movementNumber rdf:type owl:DatatypeProperty ;
+                  rdfs:domain mso:Movement ;
+                  rdfs:range xsd:integer ;
+                  rdfs:comment "Movement number in the score."@en ;
+                  rdfs:label "Movement number"@en .
+
+
+###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#noteType
+so:noteType rdf:type owl:DatatypeProperty ;
+            rdfs:domain so:Duration ;
+            rdfs:range xsd:string ;
+            rdfs:comment "Raw MusicXML <type> value for a written duration (e.g., 'whole', 'half', 'quarter', 'eighth')."@en ;
+            rdfs:label "note type"@en .
 
 
 ###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#number
@@ -731,6 +855,22 @@ so:sign rdf:type owl:DatatypeProperty ;
         rdfs:label "sign"@en .
 
 
+###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#staffIndex
+so:staffIndex rdf:type owl:DatatypeProperty ;
+              rdfs:domain mso:Staff ;
+              rdfs:range xsd:integer ;
+              rdfs:comment "Integer index of a staff within a movement (e.g., 1 = upper staff, 2 = lower staff)."@en ;
+              rdfs:label "staff index"@en .
+
+
+###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#subdivisionIndex
+so:subdivisionIndex rdf:type owl:DatatypeProperty ;
+                    rdfs:domain mso:Measure ;
+                    rdfs:range xsd:decimal ;
+                    rdfs:comment "Average number of note onsets per beat in the measure (notes per beat)."@en ;
+                    rdfs:label "subdivision index"@en .
+
+
 ###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#symbol
 so:symbol rdf:type owl:DatatypeProperty ;
           rdfs:domain mto:TimeSignature ;
@@ -769,10 +909,6 @@ so:typicalBpmMin rdf:type owl:DatatypeProperty ;
                  rdfs:range xsd:decimal ;
                  rdfs:comment "Lower bound of the typical BPM range associated with a verbal tempo indication."@en ;
                  rdfs:label "typical minimum BPM"@en .
-
-
-###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#value
-so:value rdf:type owl:DatatypeProperty .
 
 
 #################################################################
@@ -850,6 +986,13 @@ mso:Rest rdf:type owl:Class ;
          rdfs:label "Rest"@en .
 
 
+###  http://linkeddata.uni-muenster.de/ontology/musicscore#Staff
+mso:Staff rdf:type owl:Class ;
+          rdfs:subClassOf so:StructuralElement ;
+          rdfs:comment "Staff (stave) used to notate music in a score."@en ;
+          rdfs:label "Staff"@en .
+
+
 ###  http://purl.org/ontology/chord/Chord
 co:Chord rdf:type owl:Class ;
          rdfs:subClassOf so:HarmonicElement ,
@@ -875,9 +1018,17 @@ co:Chord rdf:type owl:Class ;
          rdfs:label "Chord"@en .
 
 
+###  http://purl.org/ontology/mo/Instrument
+mo:Instrument rdf:type owl:Class ;
+              rdfs:subClassOf so:Metadata ;
+              rdfs:comment "Generic instrument used in a musical work or score."@en ;
+              rdfs:label "Instrument"@en .
+
+
 ###  http://purl.org/ontology/mo/MusicalWork
 mo:MusicalWork rdf:type owl:Class ;
-               rdfs:subClassOf [ rdf:type owl:Restriction ;
+               rdfs:subClassOf so:Metadata ,
+                               [ rdf:type owl:Restriction ;
                                  owl:onProperty so:hasMovement ;
                                  owl:someValuesFrom mso:Movement
                                ] ,
@@ -1128,6 +1279,28 @@ so:DottedQuarter rdf:type owl:Class ;
                  rdfs:label "Dotted quarter"@en .
 
 
+###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#DoubleFlat
+so:DoubleFlat rdf:type owl:Class ;
+              rdfs:subClassOf mto:Accidental ,
+                              [ rdf:type owl:Restriction ;
+                                owl:onProperty so:semitoneShift ;
+                                owl:hasValue -2
+                              ] ;
+              rdfs:comment "Double-flat accidental, lowers a pitch by two semitones (-2 semitones)."@en ;
+              rdfs:label "Double flat"@en .
+
+
+###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#DoubleSharp
+so:DoubleSharp rdf:type owl:Class ;
+               rdfs:subClassOf mto:Accidental ,
+                               [ rdf:type owl:Restriction ;
+                                 owl:onProperty so:semitoneShift ;
+                                 owl:hasValue 2
+                               ] ;
+               rdfs:comment "Double-sharp accidental, raises a pitch by two semitones (+2 semitones)."@en ;
+               rdfs:label "Double sharp"@en .
+
+
 ###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#Duration
 so:Duration rdf:type owl:Class ;
             rdfs:subClassOf so:MusicNotationElement ;
@@ -1178,6 +1351,13 @@ so:Flat rdf:type owl:Class ;
                         ] ;
         rdfs:comment "Flat accidental, lowers a pitch by a half-step (-1 semitone)."@en ;
         rdfs:label "Flat"@en .
+
+
+###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#FlatFlat
+so:FlatFlat rdf:type owl:Class ;
+            rdfs:subClassOf so:DoubleFlat ;
+            rdfs:comment "Synonymic class for a double-flat accidental, as encoded in some MusicXML variants (flat-flat)."@en ;
+            rdfs:label "Flat-flat"@en .
 
 
 ###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#G
@@ -1984,6 +2164,20 @@ so:Legato rdf:type owl:Class ;
           rdfs:label "Legato"@en .
 
 
+###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#LoudnessDynamic
+so:LoudnessDynamic rdf:type owl:Class ;
+                   rdfs:subClassOf mso:Dynamic ;
+                   rdfs:comment "Instantaneous loudness dynamic (p, mf, ff, and similar marks, including compound forms like sf or fp)."@en ;
+                   rdfs:label "Loudness dynamic"@en .
+
+
+###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#LowerPianoStaff
+so:LowerPianoStaff rdf:type owl:Class ;
+                   rdfs:subClassOf so:PianoStaff ;
+                   rdfs:comment "Lower staff of the piano grand staff, usually played with the left hand."@en ;
+                   rdfs:label "Lower piano staff"@en .
+
+
 ###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#MelodicElement
 so:MelodicElement rdf:type owl:Class ;
                   rdfs:comment "A melodic element of a score."@en ;
@@ -2000,6 +2194,10 @@ so:MelodicProgression rdf:type owl:Class ;
                                       ] ;
                       rdfs:comment "A sequence of notes forming a melodic line or voice."@en ;
                       rdfs:label "Melodic progression"@en .
+
+
+###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#Metadata
+so:Metadata rdf:type owl:Class .
 
 
 ###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#Moderato
@@ -2063,6 +2261,13 @@ so:Phrase rdf:type owl:Class ;
                           ] ;
           rdfs:comment "A short musical unit forming a coherent idea."@en ;
           rdfs:label "Phrase"@en .
+
+
+###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#PianoStaff
+so:PianoStaff rdf:type owl:Class ;
+              rdfs:subClassOf mso:Staff ;
+              rdfs:comment "Staff for piano notation, typically part of a grand staff."@en ;
+              rdfs:label "Piano staff"@en .
 
 
 ###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#Pitch
@@ -2188,6 +2393,13 @@ so:Sharp rdf:type owl:Class ;
          rdfs:label "Sharp"@en .
 
 
+###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#SharpSharp
+so:SharpSharp rdf:type owl:Class ;
+              rdfs:subClassOf so:DoubleSharp ;
+              rdfs:comment "Synonymic class for a double-sharp accidental, as encoded in some MusicXML variants (sharp-sharp)."@en ;
+              rdfs:label "Sharp-sharp"@en .
+
+
 ###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#SixteenthNote
 so:SixteenthNote rdf:type owl:Class ;
                  rdfs:subClassOf so:Duration ;
@@ -2216,6 +2428,10 @@ so:Sonata rdf:type owl:Class ;
 ###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#SonataMovement
 so:SonataMovement rdf:type owl:Class ;
                   rdfs:subClassOf mso:Movement ,
+                                  [ rdf:type owl:Restriction ;
+                                    owl:onProperty so:movementHasStaff ;
+                                    owl:someValuesFrom so:PianoStaff
+                                  ] ,
                                   [ rdf:type owl:Restriction ;
                                     owl:onProperty so:hasSection ;
                                     owl:allValuesFrom so:SonataSection
@@ -2498,6 +2714,12 @@ so:TS_9_8 rdf:type owl:Class ;
           rdfs:label "9/8 time"@en .
 
 
+###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#TechnicalComplexityProfile
+so:TechnicalComplexityProfile rdf:type owl:Class ;
+                              rdfs:comment "Analytical element that summarizes the local technical complexity of a score or passage (e.g., density, range, leaps)."@en ;
+                              rdfs:label "Technical complexity profile"@en .
+
+
 ###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#Tempo
 so:Tempo rdf:type owl:Class ;
          rdfs:subClassOf so:MusicNotationElement ;
@@ -2553,6 +2775,13 @@ so:TrebleClef rdf:type owl:Class ;
               rdfs:label "Treble clef (G clef)"@en .
 
 
+###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#UpperPianoStaff
+so:UpperPianoStaff rdf:type owl:Class ;
+                   rdfs:subClassOf so:PianoStaff ;
+                   rdfs:comment "Upper staff of the piano grand staff, usually played with the right hand."@en ;
+                   rdfs:label "Upper piano staff"@en .
+
+
 ###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#Vivace
 so:Vivace rdf:type owl:Class ;
           rdfs:subClassOf so:Tempo ,
@@ -2581,13 +2810,13 @@ so:WholeNote rdf:type owl:Class ;
 
 ###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#f
 so:f rdf:type owl:Class ;
-     rdfs:subClassOf mso:Dynamic ,
+     rdfs:subClassOf so:LoudnessDynamic ,
                      [ rdf:type owl:Restriction ;
                        owl:onProperty so:dynamicLevel ;
                        owl:hasValue 6
                      ] ,
                      [ rdf:type owl:Restriction ;
-                       owl:onProperty so:value ;
+                       owl:onProperty so:dynamicValue ;
                        owl:hasValue "f"
                      ] ;
      rdfs:comment "Forte; loud."@en ;
@@ -2596,13 +2825,13 @@ so:f rdf:type owl:Class ;
 
 ###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#ff
 so:ff rdf:type owl:Class ;
-      rdfs:subClassOf mso:Dynamic ,
+      rdfs:subClassOf so:LoudnessDynamic ,
                       [ rdf:type owl:Restriction ;
                         owl:onProperty so:dynamicLevel ;
                         owl:hasValue 7
                       ] ,
                       [ rdf:type owl:Restriction ;
-                        owl:onProperty so:value ;
+                        owl:onProperty so:dynamicValue ;
                         owl:hasValue "ff"
                       ] ;
       rdfs:comment "Fortissimo; very loud."@en ;
@@ -2611,13 +2840,13 @@ so:ff rdf:type owl:Class ;
 
 ###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#fff
 so:fff rdf:type owl:Class ;
-       rdfs:subClassOf mso:Dynamic ,
+       rdfs:subClassOf so:LoudnessDynamic ,
                        [ rdf:type owl:Restriction ;
                          owl:onProperty so:dynamicLevel ;
                          owl:hasValue 8
                        ] ,
                        [ rdf:type owl:Restriction ;
-                         owl:onProperty so:value ;
+                         owl:onProperty so:dynamicValue ;
                          owl:hasValue "fff"
                        ] ;
        rdfs:comment "Fortississimo; extremely loud."@en ;
@@ -2626,13 +2855,13 @@ so:fff rdf:type owl:Class ;
 
 ###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#mf
 so:mf rdf:type owl:Class ;
-      rdfs:subClassOf mso:Dynamic ,
+      rdfs:subClassOf so:LoudnessDynamic ,
                       [ rdf:type owl:Restriction ;
                         owl:onProperty so:dynamicLevel ;
                         owl:hasValue 5
                       ] ,
                       [ rdf:type owl:Restriction ;
-                        owl:onProperty so:value ;
+                        owl:onProperty so:dynamicValue ;
                         owl:hasValue "mf"
                       ] ;
       rdfs:comment "Mezzo-forte; moderately loud."@en ;
@@ -2641,13 +2870,13 @@ so:mf rdf:type owl:Class ;
 
 ###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#mp
 so:mp rdf:type owl:Class ;
-      rdfs:subClassOf mso:Dynamic ,
+      rdfs:subClassOf so:LoudnessDynamic ,
                       [ rdf:type owl:Restriction ;
                         owl:onProperty so:dynamicLevel ;
                         owl:hasValue 4
                       ] ,
                       [ rdf:type owl:Restriction ;
-                        owl:onProperty so:value ;
+                        owl:onProperty so:dynamicValue ;
                         owl:hasValue "mp"
                       ] ;
       rdfs:comment "Mezzo-piano; moderately soft."@en ;
@@ -2656,13 +2885,13 @@ so:mp rdf:type owl:Class ;
 
 ###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#p
 so:p rdf:type owl:Class ;
-     rdfs:subClassOf mso:Dynamic ,
+     rdfs:subClassOf so:LoudnessDynamic ,
                      [ rdf:type owl:Restriction ;
                        owl:onProperty so:dynamicLevel ;
                        owl:hasValue 3
                      ] ,
                      [ rdf:type owl:Restriction ;
-                       owl:onProperty so:value ;
+                       owl:onProperty so:dynamicValue ;
                        owl:hasValue "p"
                      ] ;
      rdfs:comment "Piano; soft."@en ;
@@ -2671,13 +2900,13 @@ so:p rdf:type owl:Class ;
 
 ###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#pp
 so:pp rdf:type owl:Class ;
-      rdfs:subClassOf mso:Dynamic ,
+      rdfs:subClassOf so:LoudnessDynamic ,
                       [ rdf:type owl:Restriction ;
                         owl:onProperty so:dynamicLevel ;
                         owl:hasValue 2
                       ] ,
                       [ rdf:type owl:Restriction ;
-                        owl:onProperty so:value ;
+                        owl:onProperty so:dynamicValue ;
                         owl:hasValue "pp"
                       ] ;
       rdfs:comment "Pianissimo; very soft."@en ;
@@ -2686,13 +2915,13 @@ so:pp rdf:type owl:Class ;
 
 ###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#ppp
 so:ppp rdf:type owl:Class ;
-       rdfs:subClassOf mso:Dynamic ,
+       rdfs:subClassOf so:LoudnessDynamic ,
                        [ rdf:type owl:Restriction ;
                          owl:onProperty so:dynamicLevel ;
                          owl:hasValue 1
                        ] ,
                        [ rdf:type owl:Restriction ;
-                         owl:onProperty so:value ;
+                         owl:onProperty so:dynamicValue ;
                          owl:hasValue "ppp"
                        ] ;
        rdfs:comment "Pianississimo; very, very soft."@en ;
@@ -2795,7 +3024,9 @@ so:relativeMinor rdfs:comment "Schema-level relation between a major-key class a
 
 
 [ rdf:type owl:AllDisjointClasses ;
-  owl:members ( so:Flat
+  owl:members ( so:DoubleFlat
+                so:DoubleSharp
+                so:Flat
                 so:Natural
                 so:Sharp
               )
@@ -2894,4 +3125,100 @@ so:relativeMinor rdfs:comment "Schema-level relation between a major-key class a
               )
 ] .
 
+###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#LocalComplexityIndex
+so:LocalComplexityIndex rdf:type owl:Class ;
+    rdfs:subClassOf so:TechnicalComplexityProfile ;
+    rdfs:comment "Local technical complexity profile instance associated to a single measure, aggregating note density, accidentals, rhythmic subdivision, dynamics and articulations into a scalar LCI value."@en ;
+    rdfs:label "Local complexity index"@en .
 
+###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#noteCount
+so:noteCount rdf:type owl:DatatypeProperty ;
+    rdfs:domain so:LocalComplexityIndex ;
+    rdfs:range  xsd:integer ;
+    rdfs:comment "Number of note events in the measure associated to this local technical complexity profile."@en ;
+    rdfs:label "note count"@en .
+
+
+
+###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#measureAccidentalCount
+so:measureAccidentalCount rdf:type owl:DatatypeProperty ;
+    rdfs:domain so:LocalComplexityIndex ;
+    rdfs:range xsd:integer ;
+    rdfs:comment "Total number of accidentals (mto:Accidental) attached to notes in the associated measure."@en ;
+    rdfs:label "measure accidental count"@en .
+
+
+###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#subdivisionIndex
+so:subdivisionIndex rdf:type owl:DatatypeProperty ;
+    rdfs:domain so:LocalComplexityIndex ;
+    rdfs:range xsd:integer ;
+    rdfs:comment "Rhythmic subdivision index for the associated measure, derived from the shortest note relative to the beat unit."@en ;
+    rdfs:label "subdivision index"@en .
+
+
+###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#minNoteValue
+so:minNoteValue rdf:type owl:DatatypeProperty ;
+    rdfs:domain so:LocalComplexityIndex ;
+    rdfs:range xsd:integer ;
+    rdfs:comment "Shortest note value in the associated measure, encoded as denominator of the whole-note fraction (1=whole, 2=half, 4=quarter, 8=eighth, etc.). Higher values mean shorter notes."@en ;
+    rdfs:label "minimum note value"@en .
+
+
+###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#dynamicCount
+so:dynamicCount rdf:type owl:DatatypeProperty ;
+    rdfs:domain so:LocalComplexityIndex ;
+    rdfs:range xsd:integer ;
+    rdfs:comment "Number of loudness dynamics (so:LoudnessDynamic) applied to symbolic events in the associated measure."@en ;
+    rdfs:label "dynamic count"@en .
+
+
+###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#articulationCount
+so:articulationCount rdf:type owl:DatatypeProperty ;
+    rdfs:domain so:LocalComplexityIndex ;
+    rdfs:range xsd:integer ;
+    rdfs:comment "Number of articulations considered in the local complexity computation; in the current implementation this counts only staccato articulations (so:Staccato) in the associated measure."@en ;
+    rdfs:label "articulation count"@en .
+
+
+###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#LCIvalue
+so:LCIvalue rdf:type owl:DatatypeProperty ;
+    rdfs:domain so:LocalComplexityIndex ;
+    rdfs:range xsd:decimal ;
+    rdfs:comment "Scalar local complexity index value in [0,1], computed from note density, accidentals, rhythmic subdivision, dynamics and articulations for a single measure."@en ;
+    rdfs:label "LCI value"@en .
+
+###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#GlobalComplexityProfile
+so:GlobalComplexityProfile rdf:type owl:Class ;
+    rdfs:subClassOf so:TechnicalComplexityProfile ;
+    rdfs:comment "Global technical complexity profile for a sonata movement, aggregating the distribution of LocalComplexityIndex values across its measures into a single scalar index and related statistics."@en ;
+    rdfs:label "Global complexity profile"@en .
+
+[ rdf:type owl:AllDisjointClasses ;
+  owl:members ( so:LocalComplexityIndex
+                so:GlobalComplexityProfile
+              )
+] .
+
+### Movement → GlobalComplexityProfile
+so:hasGlobalComplexityProfile rdf:type owl:ObjectProperty ;
+    owl:inverseOf so:isGlobalComplexityProfileOf ;
+    rdfs:domain so:SonataMovement ;
+    rdfs:range  so:GlobalComplexityProfile ;
+    rdfs:comment "Relates a sonata movement to its global technical complexity profile."@en ;
+    rdfs:label "has global complexity profile"@en .
+
+so:isGlobalComplexityProfileOf rdf:type owl:ObjectProperty ;
+    rdfs:domain so:GlobalComplexityProfile ;
+    rdfs:range  so:SonataMovement ;
+    rdfs:comment "Inverse relation linking a global complexity profile to the sonata movement it summarizes."@en ;
+    rdfs:label "is global complexity profile of"@en .
+
+###  https://github.com/valdiviasharon/Sonata-Ontology/sonata_ontology#globalComplexityIndex
+so:globalComplexityIndex rdf:type owl:DatatypeProperty ;
+    rdfs:domain so:GlobalComplexityProfile ;
+    rdfs:range xsd:decimal ;
+    rdfs:comment "Scalar global technical complexity index for a movement, typically derived from the distribution of LocalComplexityIndex values (e.g., mean, max, or a weighted combination)."@en ;
+    rdfs:label "global complexity index"@en .
+
+
+###  Generated by the OWL API (version 4.5.29.2024-05-13T12:11:03Z) https://github.com/owlcs/owlapi
